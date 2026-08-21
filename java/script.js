@@ -1,148 +1,474 @@
-// Diccionario de Datos Científicos del Ciclo del Carbono
-const biologyData = {
-    fabrica: {
-        title: "Emisiones de Complejos Industriales",
-        tag: "emision",
-        tagText: "Emisión Antrópica Directa",
-        importance: "Las industrias queman combustibles fósiles (carbón, derivados de petróleo), liberando en pocos segundos carbono inorgánico que estuvo confinado bajo tierra de forma segura durante más de 300 millones de años.",
-        influence: "El proceso químico combina hidrocarburos con oxígeno atmosférico mediante combustión, rompiendo por completo los sumideros del ciclo dinámico natural.",
-        environmental: "Es la fuerza rectora detrás del aumento drástico del efecto invernadero antropogénico y la desestabilización climática actual.",
-        particles: { from: {x: 10, y: 38}, to: {x: 50, y: 12}, color: "emit" }
-    },
-    auto: {
-        title: "Emisiones por Transporte Público y Privado",
-        tag: "emision",
-        tagText: "Combustión Móvil Continua",
-        importance: "Los motores de combustión interna de los automóviles oxidan gasolinas o diésel, transformándolos inmediatamente en dióxido de carbono gaseoso (CO₂) y vapor de agua.",
-        influence: "Aporta un flujo difuso pero masivo de carbono directo hacia el compartimiento de la atmósfera a nivel superficial de la isla.",
-        environmental: "Incrementa los niveles locales de contaminación en las capas bióticas bajas del aire urbano, alterando los balances gaseosos locales.",
-        particles: { from: {x: 15, y: 48}, to: {x: 50, y: 12}, color: "emit" }
-    },
-    bosque: {
-        title: "Fijación Vegetal (Fotosíntesis Terrestre)",
-        tag: "absorcion",
-        tagText: "Sumidero Biótico Crítico",
-        importance: "Los árboles y plantas terrestres actúan como los pulmones metabólicos fijos de la isla. Capturan activamente el carbono gaseoso (CO₂) libre del aire.",
-        influence: "Mediante el mecanismo enzimático de la fotosíntesis, utilizan la energía fotónica solar para romper el CO₂, liberando el oxígeno gaseoso (O₂) y reteniendo la molécula de carbono para biosintetizar glucosa y celulosa (madera).",
-        environmental: "La deforestación provoca la pérdida masiva de este escudo regulador; al talarse o quemarse, todo el carbono almacenado en los troncos regresa a la atmósfera.",
-        particles: { from: {x: 50, y: 12}, to: {x: 34, y: 40}, color: "absorb" }
-    },
-    ganado: {
-        title: "Ganadería e Intercambio Biológico",
-        tag: "emision",
-        tagText: "Emisión por Respiración y Fermentación",
-        importance: "Los animales terrestres participan mediante la respiración celular (liberando CO₂ metabólico) y la digestión de materia orgánica compleja.",
-        influence: "Los rumiantes (vacas) albergan bacterias metanogénicas en su sistema digestivo. Generan gas Metano (CH₄) mediante fermentación entérica, el cual es expulsado a la atmósfera. El CH₄ es un compuesto de carbono mucho más potente atrapando calor que el CO₂.",
-        environmental: "El auge desmedido de la ganadería intensiva a escala global sobrecarga la atmósfera con gases de efecto invernadero pesados.",
-        particles: { from: {x: 48, y: 46}, to: {x: 50, y: 12}, color: "emit" }
-    },
-    ballena_playa: {
-        title: "Ballena Varada en Playa (Descomposición)",
-        tag: "emision",
-        tagText: "Reciclaje Biológico de Superficie",
-        importance: "Cuando un gran mamífero marino muere y queda varado en la playa, su inmensa masa orgánica rica en carbono queda expuesta a la atmósfera superior.",
-        influence: "Las bacterias descomponedoras aeróbicas metabolizan los tejidos blandos del animal. Rompen las proteínas y grasas, liberando volúmenes considerables de gas CO₂ y gases metabólicos directamente hacia el aire de la costa.",
-        environmental: "Ilustra el reciclaje rápido de nutrientes superficiales. Si se descompone al aire libre, su carbono no es secuestrado, sino reciclado de inmediato en la atmósfera gaseosa.",
-        particles: { from: {x: 72, y: 55}, to: {x: 50, y: 12}, color: "emit" }
-    },
-    algas: {
-        title: "Fijación por Algas Marinas y Fitoplancton",
-        tag: "absorcion",
-        tagText: "El Mayor Sumidero Biológico Global",
-        importance: "Las macroalgas y el fitoplancton en los océanos realizan más del 50% de la actividad fotosintética total del planeta Tierra.",
-        influence: "Absorben el carbono disuelto en el agua superficial marina proveniente del intercambio con el aire, fijándolo en cadenas orgánicas subacuáticas y sustentando toda la red trófica marina.",
-        environmental: "El calentamiento excesivo del agua destruye las poblaciones de algas, colapsando el principal mecanismo natural de captura de carbono del planeta.",
-        particles: { from: {x: 50, y: 12}, to: {x: 64, y: 76}, color: "absorb" }
-    },
-    ballena_fondo: {
-        title: "Caída de Ballenas (Secuestro Biológico Profundo)",
-        tag: "almacen",
-        tagText: "Sumidero a Escala Geológica",
-        importance: "Cuando una ballena muere de forma natural en alta mar, su cuerpo se hunde al fondo del océano, un fenómeno biológico clave denominado *Caída de Ballenas* (*Whale Fall*).",
-        influence: "El cadáver transporta de golpe toneladas de carbono orgánico puro hacia las profundidades abisales. Allí, es consumido lentamente por ecosistemas bentónicos y sus restos óseos quedan cubiertos por sedimentos, aislando el carbono de la atmósfera por miles o millones de años.",
-        environmental: "Los cetáceos grandes son amortiguadores biológicos vivos del calentamiento global; una sola ballena secuestra el equivalente a miles de árboles.",
-        particles: { from: {x: 64, y: 76}, to: {x: 32, y: 80}, color: "absorb" }
-    },
-    co2_fondo: {
-        title: "Carbono Concentrado e Inorgánico en el Fondo",
-        tag: "almacen",
-        tagText: "Bomba Físico-Química de Solubilidad",
-        importance: "El fondo marino funciona como un gigantesco almacén inorgánico de carbono donde el CO₂ disuelto se encuentra a altas presiones y bajas temperaturas.",
-        influence: "El carbono inorgánico precipita en forma de carbonato de calcio (CaCO₃), acumulándose en el lecho marino profundo e integrando rocas sedimentarias sedimentadas.",
-        environmental: "Al aumentar los niveles de CO₂ atmosférico, el mar absorbe más gas de lo normal, provocando la **acidificación de los océanos**. Esto debilita las conchas de moluscos y corales.",
-        particles: { from: {x: 32, y: 80}, to: {x: 12, y: 86}, color: "absorb" }
-    }
+/*
+  SIMULADOR DEL CICLO DEL CARBONO
+
+  IMPORTANTE:
+  Los valores utilizados son "unidades didácticas de CO₂".
+  NO representan cantidades reales de moléculas, toneladas o ppm.
+
+  El objetivo es que el alumno pueda experimentar con:
+  emisiones - absorciones = balance neto
+*/
+
+// --------------------------------------------------
+// CONFIGURACIÓN DE CADA ELEMENTO
+// --------------------------------------------------
+
+const carbonData = {
+
+  factory: {
+    name: "Fábrica",
+    icon: "🏭",
+
+    // Emisión por fábrica
+    emitted: 100,
+
+    // Las fábricas no absorben CO₂ en este modelo
+    absorbed: 0,
+
+    description:
+      "La quema de combustibles fósiles en industrias libera dióxido de carbono a la atmósfera. En este modelo, las fábricas representan una fuente de carbono atmosférico.",
+
+    explanation:
+      "Cuando se utilizan combustibles fósiles como carbón, petróleo o gas natural, el carbono almacenado durante millones de años pasa rápidamente a la atmósfera principalmente en forma de CO₂."
+  },
+
+  car: {
+    name: "Auto",
+    icon: "🚗",
+
+    emitted: 20,
+    absorbed: 0,
+
+    description:
+      "Los vehículos que utilizan combustibles fósiles liberan CO₂ durante la combustión.",
+
+    explanation:
+      "El carbono presente en la gasolina o el diésel se combina con oxígeno durante la combustión y genera principalmente CO₂, que pasa a la atmósfera."
+  },
+
+  tree: {
+    name: "Planta / árbol",
+    icon: "🌳",
+
+    // Respiración vegetal: libera CO₂
+    emitted: 10,
+
+    // Fotosíntesis: captura CO₂
+    absorbed: 15,
+
+    description:
+      "Las plantas intercambian carbono constantemente con la atmósfera. Respiran y liberan CO₂, pero mediante la fotosíntesis capturan CO₂ para producir materia orgánica.",
+
+    explanation:
+      "Durante la fotosíntesis, las plantas toman CO₂ de la atmósfera y utilizan la energía de la luz para fabricar moléculas orgánicas. Al mismo tiempo, las plantas realizan respiración celular y liberan CO₂. En este ejemplo, una planta captura más CO₂ del que libera."
+  },
+
+  cattle: {
+    name: "Ganado",
+    icon: "🐄",
+
+    emitted: 8,
+    absorbed: 0,
+
+    description:
+      "El ganado forma parte del ciclo del carbono porque el carbono presente en su alimento pasa por su organismo y vuelve al ambiente mediante la respiración y otros procesos.",
+
+    explanation:
+      "Los animales obtienen carbono al alimentarse. Una parte vuelve a la atmósfera como CO₂ mediante la respiración. En rumiantes también existe producción de metano durante la digestión, aunque este simulador se concentra en el CO₂ para simplificar el modelo."
+  },
+
+  algae: {
+    name: "Algas",
+    icon: "🌿",
+
+    emitted: 4,
+    absorbed: 12,
+
+    description:
+      "Las algas marinas realizan fotosíntesis y absorben CO₂ disuelto en el agua.",
+
+    explanation:
+      "Las algas utilizan carbono inorgánico disponible en el océano para realizar fotosíntesis. El carbono puede incorporarse a su biomasa y posteriormente pasar a otros organismos o volver al ambiente."
+  },
+
+  whaleBeach: {
+    name: "Ballena muerta en la playa",
+    icon: "🐋",
+
+    emitted: 12,
+    absorbed: 0,
+
+    description:
+      "Cuando un organismo muere comienza la descomposición. Los microorganismos degradan su materia orgánica y parte del carbono vuelve al ambiente.",
+
+    explanation:
+      "Una ballena contiene una gran cantidad de carbono en sus tejidos. Después de morir, organismos descomponedores utilizan esa materia. La respiración de los descomponedores puede liberar CO₂, mientras que otra parte del carbono puede permanecer en sedimentos o pasar a otros organismos."
+  },
+
+  whaleSea: {
+    name: "Ballena muerta en el océano",
+    icon: "🐋",
+
+    emitted: 15,
+    absorbed: 0,
+
+    description:
+      "Una ballena muerta en el océano aporta materia orgánica y carbono al ecosistema marino.",
+
+    explanation:
+      "El cuerpo de una ballena puede alimentar a numerosos organismos. Durante la descomposición, parte del carbono vuelve al agua como carbono disuelto y eventualmente puede intercambiarse con la atmósfera. Otra parte puede quedar almacenada en el fondo marino."
+  }
 };
 
-const nodes = document.querySelectorAll('.element-node');
-const defaultMsg = document.getElementById('default-msg');
-const activeContent = document.getElementById('active-content');
 
-const infoTitle = document.getElementById('info-title');
-const infoTag = document.getElementById('info-tag');
-const infoImportance = document.getElementById('info-importance');
-const infoInfluence = document.getElementById('info-influence');
-const infoEnvironmental = document.getElementById('info-environmental');
-const particlesContainer = document.getElementById('particles');
+// --------------------------------------------------
+// VALORES INICIALES
+// --------------------------------------------------
 
-// Manejo de Interacciones con un Clic
-nodes.forEach(node => {
-    node.addEventListener('click', () => {
-        const key = node.getAttribute('data-step');
-        const data = biologyData[key];
-        
-        if (data) {
-            // Actualizar estados visuales de los nodos activos
-            nodes.forEach(n => n.classList.remove('active'));
-            node.classList.add('active');
-            
-            // Alternar visibilidad de paneles
-            defaultMsg.classList.add('hidden');
-            activeContent.classList.remove('hidden');
-            
-            // Inyectar textos biológicos validados
-            infoTitle.textContent = data.title;
-            infoImportance.textContent = data.importance;
-            infoInfluence.textContent = data.influence;
-            infoEnvironmental.textContent = data.environmental;
-            
-            // Configurar etiqueta visual del proceso
-            infoTag.className = `flow-tag ${data.tag}`;
-            infoTag.textContent = data.tagText;
-            
-            // Disparar las micro-partículas de CO2
-            animateCarbonStream(data.particles);
-        }
-    });
+const defaultCounts = {
+  factory: 2,
+  car: 5,
+  tree: 10,
+  cattle: 5,
+  algae: 20,
+  whaleBeach: 1,
+  whaleSea: 1
+};
+
+let counts = { ...defaultCounts };
+
+
+// --------------------------------------------------
+// ELEMENTOS DEL DOM
+// --------------------------------------------------
+
+const inputs = {
+  factory: document.getElementById("factoryCount"),
+  car: document.getElementById("carCount"),
+  tree: document.getElementById("treeCount"),
+  cattle: document.getElementById("cattleCount"),
+  algae: document.getElementById("algaeCount"),
+  whaleBeach: document.getElementById("whaleBeachCount"),
+  whaleSea: document.getElementById("whaleSeaCount")
+};
+
+const valueLabels = {
+  factory: document.getElementById("factoryCountValue"),
+  car: document.getElementById("carCountValue"),
+  tree: document.getElementById("treeCountValue"),
+  cattle: document.getElementById("cattleCountValue"),
+  algae: document.getElementById("algaeCountValue"),
+  whaleBeach: document.getElementById("whaleBeachCountValue"),
+  whaleSea: document.getElementById("whaleSeaCountValue")
+};
+
+const totalEmitted = document.getElementById("totalEmitted");
+const totalAbsorbed = document.getElementById("totalAbsorbed");
+const netBalance = document.getElementById("netBalance");
+const atmosphereCO2 = document.getElementById("atmosphereCO2");
+const temperature = document.getElementById("temperature");
+
+const infoPanel = document.getElementById("infoPanel");
+const infoIcon = document.getElementById("infoIcon");
+const infoTitle = document.getElementById("infoTitle");
+const infoDescription = document.getElementById("infoDescription");
+const infoStats = document.getElementById("infoStats");
+const closeInfo = document.getElementById("closeInfo");
+
+
+// --------------------------------------------------
+// ACTUALIZAR VALORES DE LOS CONTROLES
+// --------------------------------------------------
+
+function updateLabels() {
+
+  Object.keys(inputs).forEach(key => {
+
+    valueLabels[key].textContent = counts[key];
+
+  });
+}
+
+
+// --------------------------------------------------
+// CALCULAR EMISIONES
+// --------------------------------------------------
+
+function calculateEmissions() {
+
+  let total = 0;
+
+  Object.keys(counts).forEach(key => {
+
+    total += counts[key] * carbonData[key].emitted;
+
+  });
+
+  return total;
+}
+
+
+// --------------------------------------------------
+// CALCULAR ABSORCIONES
+// --------------------------------------------------
+
+function calculateAbsorptions() {
+
+  let total = 0;
+
+  Object.keys(counts).forEach(key => {
+
+    total += counts[key] * carbonData[key].absorbed;
+
+  });
+
+  return total;
+}
+
+
+// --------------------------------------------------
+// BALANCE
+// --------------------------------------------------
+
+function calculateBalance() {
+
+  const emitted = calculateEmissions();
+  const absorbed = calculateAbsorptions();
+
+  return emitted - absorbed;
+}
+
+
+// --------------------------------------------------
+// TEMPERATURA DIDÁCTICA
+// --------------------------------------------------
+
+function calculateTemperature(balance) {
+
+  /*
+    Esto NO es una ecuación climática real.
+
+    Se utiliza una escala educativa para visualizar
+    que un aumento del CO₂ atmosférico puede asociarse
+    con un aumento de temperatura.
+
+    Tomamos 0 como punto de referencia.
+  */
+
+  const baseline = 15;
+
+  const temperatureIncrease = balance * 0.01;
+
+  return baseline + temperatureIncrease;
+}
+
+
+// --------------------------------------------------
+// ACTUALIZAR SIMULADOR
+// --------------------------------------------------
+
+function updateSimulation() {
+
+  const emitted = calculateEmissions();
+  const absorbed = calculateAbsorptions();
+
+  const balance = emitted - absorbed;
+
+  const temp = calculateTemperature(balance);
+
+  totalEmitted.textContent = emitted;
+  totalAbsorbed.textContent = absorbed;
+
+  netBalance.textContent = balance;
+
+  atmosphereCO2.textContent = Math.max(balance, 0);
+
+  temperature.textContent =
+    `${temp.toFixed(1)} °C`;
+
+  // Color del balance
+  if (balance > 0) {
+
+    netBalance.style.color = "#e65100";
+
+  } else if (balance < 0) {
+
+    netBalance.style.color = "#2e7d32";
+
+  } else {
+
+    netBalance.style.color = "#1976d2";
+
+  }
+
+  updateLabels();
+
+  updateAtmosphereVisual(balance);
+}
+
+
+// --------------------------------------------------
+// EFECTO VISUAL DEL CO₂
+// --------------------------------------------------
+
+function updateAtmosphereVisual(balance) {
+
+  const atmosphere = document.querySelector(".sky");
+
+  /*
+    A mayor balance positivo:
+    - aumenta ligeramente el color rojizo
+    - representa didácticamente un aumento del CO₂
+  */
+
+  const intensity =
+    Math.min(Math.max(balance / 1000, 0), 0.35);
+
+  atmosphere.style.background = `
+    linear-gradient(
+      #8dd9ff 0%,
+      #c9efff 45%,
+      rgba(255, ${247 - intensity * 120}, ${235 - intensity * 120}, 1) 45%,
+      rgba(255, ${247 - intensity * 120}, ${235 - intensity * 120}, 1) 100%
+    )
+  `;
+}
+
+
+// --------------------------------------------------
+// CONTROLES
+// --------------------------------------------------
+
+Object.keys(inputs).forEach(key => {
+
+  inputs[key].addEventListener("input", event => {
+
+    counts[key] =
+      Number(event.target.value);
+
+    updateSimulation();
+
+  });
+
 });
 
-// Animador Dinámico de Flujos de Partículas de Carbono
-function animateCarbonStream(config) {
-    particlesContainer.innerHTML = '';
-    const numParticles = 10;
-    
-    for (let i = 0; i < numParticles; i++) {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (config.color === 'absorb') dot.classList.add('absorb');
-        
-        dot.style.left = `${config.from.x}%`;
-        dot.style.top = `${config.from.y}%`;
-        particlesContainer.appendChild(dot);
-        
-        const delay = i * 150;
-        const duration = 1200 + Math.random() * 400;
-        
-        dot.animate([
-            { left: `${config.from.x}%`, top: `${config.from.y}%`, opacity: 0.9, transform: 'scale(1)' },
-            { opacity: 1, transform: 'scale(1.2)', offset: 0.3 },
-            { left: `${config.to.x}%`, top: `${config.to.y}%`, opacity: 0, transform: 'scale(0.5)' }
-        ], {
-            duration: duration,
-            delay: delay,
-            iterations: 1,
-            easing: 'ease-in-out',
-            fill: 'forwards'
-        });
-    }
+
+// --------------------------------------------------
+// INFORMACIÓN DE CADA ELEMENTO
+// --------------------------------------------------
+
+function showInfo(type) {
+
+  const data = carbonData[type];
+
+  if (!data) return;
+
+  const amount = counts[type];
+
+  const emitted =
+    amount * data.emitted;
+
+  const absorbed =
+    amount * data.absorbed;
+
+  const net =
+    emitted - absorbed;
+
+  infoIcon.textContent = data.icon;
+
+  infoTitle.textContent =
+    data.name;
+
+  infoDescription.textContent =
+    data.description;
+
+  infoStats.innerHTML = `
+
+    <div>
+      <strong>Cantidad:</strong>
+      ${amount}
+    </div>
+
+    <div class="stat-emission">
+      <strong>CO₂ emitido:</strong>
+      ${emitted} unidades
+    </div>
+
+    <div class="stat-absorption">
+      <strong>CO₂ absorbido:</strong>
+      ${absorbed} unidades
+    </div>
+
+    <div>
+      <strong>Balance:</strong>
+      ${net > 0 ? "+" : ""}${net} unidades
+    </div>
+
+    <br>
+
+    <div>
+      ${data.explanation}
+    </div>
+  `;
+
+  infoPanel.classList.add("visible");
 }
+
+
+// --------------------------------------------------
+// CLICK SOBRE ELEMENTOS
+// --------------------------------------------------
+
+document.querySelectorAll("[data-info]").forEach(element => {
+
+  element.addEventListener("click", () => {
+
+    const type =
+      element.dataset.info;
+
+    showInfo(type);
+
+  });
+
+});
+
+
+// --------------------------------------------------
+// CERRAR PANEL
+// --------------------------------------------------
+
+closeInfo.addEventListener("click", () => {
+
+  infoPanel.classList.remove("visible");
+
+});
+
+
+// --------------------------------------------------
+// REINICIAR
+// --------------------------------------------------
+
+document.getElementById("resetBtn")
+  .addEventListener("click", () => {
+
+    counts = { ...defaultCounts };
+
+    Object.keys(inputs).forEach(key => {
+
+      inputs[key].value =
+        counts[key];
+
+    });
+
+    infoPanel.classList.remove("visible");
+
+    updateSimulation();
+
+  });
+
+
+// --------------------------------------------------
+// INICIALIZACIÓN
+// --------------------------------------------------
+
+updateSimulation();

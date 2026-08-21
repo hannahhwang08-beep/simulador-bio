@@ -1,97 +1,844 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
-    --sky-color: #dff9fb;
-    --grass-color: #78e08f;
-    --sand-color: #f7d794;
-    --ocean-surface: #38ada9;
-    --ocean-deep: #079992;
-    --dark-slate: #2c3e50;
+  --green: #2e7d32;
+  --dark-green: #164d2a;
+  --light-green: #8bc34a;
+  --blue: #1976d2;
+  --ocean: #0878b9;
+  --sand: #f5d58b;
+  --dark: #102a43;
+  --white: #ffffff;
+  --red: #e53935;
+  --orange: #fb8c00;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+body {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
-body { background-color: #f0f3f4; color: #333; padding: 15px; }
+  background:
+    linear-gradient(
+      135deg,
+      #e9f8ed,
+      #d9f1ff
+    );
 
-.app-container { max-width: 1300px; margin: 0 auto; }
-
-.main-header { text-align: center; margin-bottom: 15px; }
-.main-header h1 { color: var(--dark-slate); font-size: 1.8rem; }
-.main-header p { color: #7f8c8d; font-size: 0.95rem; }
-
-/* Disposición de rejilla */
-.main-layout { display: grid; grid-template-columns: 2.8fr 1.2fr; gap: 20px; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-
-@media (max-width: 1000px) { .main-layout { grid-template-columns: 1fr; } }
-
-/* Lienzo Geográfico Integrado (La Isla) */
-.island-canvas {
-    position: relative;
-    height: 550px;
-    border-radius: 8px;
-    overflow: hidden;
-    /* Degradado lineal por capas: Cielo -> Tierra -> Playa -> Superficie Marina -> Mar Profundo */
-    background: linear-gradient(to bottom, 
-        var(--sky-color) 0%, var(--sky-color) 35%, 
-        var(--grass-color) 35%, var(--grass-color) 52%, 
-        var(--sand-color) 52%, var(--sand-color) 62%, 
-        var(--ocean-surface) 62%, var(--ocean-surface) 75%, 
-        var(--ocean-deep) 75%, var(--ocean-deep) 100%);
-    border: 3px solid #bdc3c7;
+  color: var(--dark);
+  min-height: 100vh;
 }
 
-/* Capa de atmósfera */
-.atmosphere { position: absolute; top: 0; width: 100%; height: 20%; display: flex; justify-content: center; align-items: center; }
-.co2-pool { background: rgba(84, 110, 122, 0.9); color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+/* ---------------- HEADER ---------------- */
 
-/* Capa fija de flechas SVG */
-.flow-arrows-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+.topbar {
+  min-height: 82px;
+  padding: 15px 28px;
 
-/* Nodos interactivos de la isla */
-.element-node { position: absolute; display: flex; flex-direction: column; align-items: center; cursor: pointer; z-index: 5; transition: transform 0.2s; }
-.element-node:hover { transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(255,255,255,0.9)); }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-.element-node .graphic { font-size: 2.2rem; line-height: 1.2; text-shadow: 1px 1px 4px rgba(0,0,0,0.2); }
-.element-node span { background: rgba(255,255,255,0.95); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-top: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); white-space: nowrap; }
+  background: rgba(255,255,255,.9);
+  border-bottom: 1px solid #d7e5df;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
 
-.element-node.active .graphic { animation: bounceActive 0.6s infinite alternate; }
+.topbar h1 {
+  color: var(--dark-green);
+  font-size: 26px;
+}
 
-@keyframes bounceActive { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+.topbar p {
+  color: #55706a;
+  margin-top: 3px;
+}
 
-/* MICROANIMACIONES DE LOS ICONOS BIÓTICOS/ABIÓTICOS */
-.car-anim { animation: drive 0.4s infinite linear alternate; }
-@keyframes drive { 0% { transform: translateX(-2px); } 100% { transform: translateX(2px); } }
+.reset-btn {
+  border: 0;
+  background: var(--dark-green);
+  color: white;
 
-.tree-sway { animation: sway 3s infinite ease-in-out alternate; transform-origin: bottom center; }
-@keyframes sway { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
+  padding: 11px 18px;
+  border-radius: 12px;
 
-.animal-chew { animation: chew 2s infinite ease-in-out; }
-@keyframes chew { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04) translateY(-1px); } }
+  cursor: pointer;
+  font-weight: 700;
+}
 
-.gas-leak { animation: gasLeak 2.5s infinite ease-in-out; opacity: 0.9; }
-@keyframes gasLeak { 0%, 100% { filter: hue-rotate(0deg); } 50% { filter: brightness(1.2); } }
+.reset-btn:hover {
+  background: #236b3b;
+}
 
-.wave-float { animation: floatOcean 3s infinite ease-in-out alternate; }
-@keyframes floatOcean { 0% { transform: translateY(-2px) rotate(-2deg); } 100% { transform: translateY(2px) rotate(2deg); } }
+/* ---------------- APP ---------------- */
 
-.deep-sink { animation: sinkSlow 4s infinite ease-in-out alternate; }
-@keyframes sinkSlow { 0% { transform: translateY(-1px); opacity: 0.85; } 100% { transform: translateY(2px); opacity: 1; } }
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: calc(100vh - 82px);
+}
 
-/* CAPA DE PARTÍCULAS */
-.particles-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
-.dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #e74c3c; opacity: 0.8; }
-.dot.absorb { background: #2ecc71; }
+/* ---------------- CONTROLES ---------------- */
 
-/* PANEL DE INFORMACIÓN LATERAL */
-.info-sidebar { background: #fdfdfd; border-left: 5px solid var(--dark-slate); padding: 18px; border-radius: 0 8px 8px 0; overflow-y: auto; }
-.hidden { display: none; }
+.control-panel {
+  padding: 22px;
 
-.flow-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; color: white; text-transform: uppercase; margin: 8px 0; }
-.flow-tag.emision { background: #e74c3c; }
-.flow-tag.absorcion { background: #2ecc71; }
-.flow-tag.almacen { background: #2980b9; }
+  background: rgba(255,255,255,.94);
+  border-right: 1px solid #d7e5df;
+}
 
-.section-block { margin-bottom: 12px; }
-.section-block h4 { font-size: 0.85rem; color: var(--dark-slate); margin-bottom: 3px; border-bottom: 1px solid #eee; padding-bottom: 2px; }
-.section-block p { font-size: 0.85rem; color: #555; line-height: 1.4; }
+.control-panel h2 {
+  margin-bottom: 6px;
+}
 
-.impact-card { background: #fff5f5; border-left: 4px solid #e74c3c; padding: 10px; border-radius: 4px; margin-top: 15px; font-size: 0.85rem; }
-.impact-card strong { color: #c0392b; display: block; margin-bottom: 2px; }
+.small {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #607d76;
+  margin-bottom: 22px;
+}
+
+.control-group {
+  margin-bottom: 19px;
+}
+
+.control-group label {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  margin-bottom: 8px;
+}
+
+.control-group label span {
+  color: var(--blue);
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--green);
+  cursor: pointer;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #dce8e3;
+  margin: 20px 0;
+}
+
+.info-box {
+  background: #eff8f0;
+  border-left: 4px solid var(--green);
+
+  padding: 13px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.info-box strong {
+  color: var(--dark-green);
+}
+
+.info-box p {
+  margin-top: 5px;
+}
+
+/* ---------------- SIMULACIÓN ---------------- */
+
+.simulation {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+}
+
+.sky {
+  height: 680px;
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      #8dd9ff 0%,
+      #c9efff 45%,
+      #dff7e8 45%,
+      #dff7e8 100%
+    );
+
+  box-shadow:
+    0 15px 45px rgba(27, 73, 61, .15);
+
+  border: 5px solid white;
+}
+
+/* ---------------- ATMÓSFERA ---------------- */
+
+.atmosphere-label {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  text-align: center;
+
+  padding: 11px 25px;
+
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+
+  border-radius: 18px;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,.08);
+
+  z-index: 10;
+}
+
+.atmosphere-label span {
+  display: block;
+  font-size: 12px;
+  color: #526b72;
+}
+
+.atmosphere-label strong {
+  display: block;
+
+  font-size: 30px;
+  line-height: 32px;
+
+  color: #c62828;
+}
+
+.atmosphere-label small {
+  color: #667;
+}
+
+.cloud {
+  position: absolute;
+  font-size: 70px;
+  opacity: .75;
+}
+
+.cloud1 {
+  top: 55px;
+  left: 30px;
+}
+
+.cloud2 {
+  top: 100px;
+  right: 30px;
+}
+
+/* ---------------- OBJETOS ---------------- */
+
+.scene-item {
+  position: absolute;
+
+  border: 0;
+  background: rgba(255,255,255,.22);
+
+  border-radius: 18px;
+
+  padding: 9px;
+
+  font-size: 45px;
+
+  cursor: pointer;
+
+  transition:
+    transform .2s,
+    background .2s,
+    box-shadow .2s;
+
+  z-index: 8;
+}
+
+.scene-item:hover {
+  transform: scale(1.12);
+
+  background: rgba(255,255,255,.55);
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.12);
+}
+
+.scene-item span {
+  display: block;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  color: #173f2a;
+}
+
+/* FÁBRICA */
+
+.factory {
+  top: 185px;
+  left: 9%;
+}
+
+/* BOSQUE */
+
+.forest {
+  top: 250px;
+  left: 43%;
+}
+
+.trees {
+  font-size: 52px;
+}
+
+/* GANADO */
+
+.cattle {
+  top: 270px;
+  left: 68%;
+
+  font-size: 38px;
+}
+
+/* CARRETERA */
+
+.road {
+  position: absolute;
+
+  top: 395px;
+  left: 0;
+
+  width: 100%;
+  height: 95px;
+
+  background:
+    linear-gradient(
+      #4b5156,
+      #303438
+    );
+
+  transform: rotate(-2deg);
+}
+
+.road-line {
+  position: absolute;
+  top: 45px;
+  width: 100%;
+  height: 5px;
+
+  background:
+    repeating-linear-gradient(
+      to right,
+      #fff 0 45px,
+      transparent 45px 85px
+    );
+}
+
+.car {
+  top: 13px;
+  left: 30%;
+  background: transparent;
+}
+
+.car2 {
+  left: 52%;
+  top: 43px;
+}
+
+/* ---------------- FLECHAS ---------------- */
+
+.arrow {
+  position: absolute;
+
+  font-size: 30px;
+  font-weight: 900;
+
+  color: #e65100;
+
+  z-index: 7;
+
+  text-shadow:
+    0 2px 0 rgba(255,255,255,.8);
+
+  animation: arrowPulse 1.5s infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% {
+    opacity: .65;
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+.arrow-factory {
+  left: 15%;
+  top: 120px;
+}
+
+.arrow-car {
+  left: 36%;
+  top: 340px;
+}
+
+.arrow-tree {
+  left: 50%;
+  top: 190px;
+  transform: rotate(-10deg);
+}
+
+.arrow-cattle {
+  left: 72%;
+  top: 215px;
+}
+
+/* ---------------- PLAYA ---------------- */
+
+.beach {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 280px;
+}
+
+.sand {
+  position: absolute;
+
+  bottom: 0;
+
+  width: 100%;
+  height: 125px;
+
+  background:
+    linear-gradient(
+      #f8dda0,
+      #eec675
+    );
+}
+
+/* ---------------- BALLENA PLAYA ---------------- */
+
+.dead-whale-beach {
+  bottom: 58px;
+  left: 25%;
+
+  font-size: 65px;
+
+  transform: rotate(-8deg);
+}
+
+.dead-whale-beach:hover {
+  transform: rotate(-8deg) scale(1.12);
+}
+
+.co2-beach {
+  position: absolute;
+
+  bottom: 165px;
+  left: 30%;
+
+  color: #c62828;
+  font-weight: 900;
+
+  animation: co2Up 2s infinite;
+}
+
+.arrow-whale-beach {
+  left: 35%;
+  bottom: 150px;
+}
+
+@keyframes co2Up {
+  0% {
+    transform: translateY(12px);
+    opacity: .3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-18px);
+    opacity: .2;
+  }
+}
+
+/* ---------------- OCÉANO ---------------- */
+
+.ocean {
+  position: absolute;
+
+  bottom: 0;
+  right: 0;
+
+  width: 52%;
+  height: 280px;
+
+  overflow: hidden;
+
+  border-radius: 80px 0 0 0;
+
+  background:
+    linear-gradient(
+      #159bd0 0%,
+      #0878b9 45%,
+      #075181 75%,
+      #043957 100%
+    );
+
+  box-shadow:
+    inset 0 10px 30px rgba(255,255,255,.2);
+}
+
+.ocean-label {
+  position: absolute;
+
+  top: 15px;
+  right: 30px;
+
+  color: white;
+
+  font-size: 14px;
+  font-weight: 900;
+
+  background: rgba(0,0,0,.15);
+
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.dead-whale-sea {
+  top: 68px;
+  left: 30%;
+
+  font-size: 48px;
+
+  filter: grayscale(.5);
+}
+
+.dead-whale-sea span {
+  color: white;
+}
+
+.algae {
+  bottom: 48px;
+  left: 15%;
+
+  font-size: 35px;
+
+  color: #70d46a;
+}
+
+.algae span {
+  color: white;
+}
+
+.deep-co2 {
+  position: absolute;
+
+  bottom: 15px;
+  right: 20px;
+
+  width: 115px;
+  height: 80px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+
+  color: #b9edff;
+
+  font-size: 12px;
+
+  opacity: .85;
+}
+
+.deep-co2 span {
+  background: rgba(0,0,0,.22);
+  padding: 4px 6px;
+  border-radius: 50%;
+}
+
+.deep-co2 strong {
+  width: 100%;
+  text-align: center;
+}
+
+.arrow-algae {
+  bottom: 95px;
+  left: 28%;
+
+  color: #b9ff8a;
+}
+
+.arrow-deep {
+  bottom: 120px;
+  left: 65%;
+
+  color: #9eeaff;
+}
+
+/* ---------------- PANEL INFO ---------------- */
+
+.info-panel {
+  position: absolute;
+
+  right: 28px;
+  top: 35px;
+
+  width: 300px;
+
+  padding: 23px;
+
+  background: rgba(255,255,255,.96);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 45px rgba(0,0,0,.16);
+
+  z-index: 30;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transform: translateX(30px);
+
+  transition:
+    .25s ease;
+}
+
+.info-panel.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.close-btn {
+  position: absolute;
+
+  top: 10px;
+  right: 12px;
+
+  border: 0;
+  background: transparent;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+.info-icon {
+  font-size: 45px;
+  margin-bottom: 8px;
+}
+
+.info-panel h2 {
+  color: var(--dark-green);
+  margin-bottom: 9px;
+}
+
+.info-panel p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #52645f;
+}
+
+.info-stats {
+  margin-top: 15px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #dce8e3;
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.stat-emission {
+  color: #c62828;
+}
+
+.stat-absorption {
+  color: #2e7d32;
+}
+
+/* ---------------- DASHBOARD ---------------- */
+
+.dashboard {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.metric {
+  background: white;
+
+  padding: 14px;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.08);
+
+  text-align: center;
+}
+
+.metric span {
+  display: block;
+
+  color: #607d76;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.metric strong {
+  display: block;
+
+  font-size: 25px;
+
+  margin-top: 3px;
+
+  color: #c62828;
+}
+
+.metric.absorption strong {
+  color: #2e7d32;
+}
+
+.metric.balance strong {
+  color: #ef6c00;
+}
+
+.metric.temperature strong {
+  color: #d84315;
+}
+
+/* ---------------- EXPLICACIÓN ---------------- */
+
+.explanation {
+  margin-top: 12px;
+
+  background: rgba(255,255,255,.85);
+
+  padding: 12px 15px;
+
+  border-radius: 12px;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+.explanation strong {
+  color: var(--dark-green);
+  margin-right: 5px;
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 1050px) {
+
+  .app {
+    grid-template-columns: 230px 1fr;
+  }
+
+  .info-panel {
+    width: 270px;
+  }
+
+  .sky {
+    height: 620px;
+  }
+}
+
+@media (max-width: 800px) {
+
+  .app {
+    display: block;
+  }
+
+  .control-panel {
+    border-right: 0;
+    border-bottom: 1px solid #d7e5df;
+  }
+
+  .simulation {
+    padding: 10px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sky {
+    height: 650px;
+  }
+
+  .info-panel {
+    left: 20px;
+    right: 20px;
+    width: auto;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .topbar {
+    padding: 12px 15px;
+  }
+
+  .topbar h1 {
+    font-size: 20px;
+  }
+
+  .topbar p {
+    font-size: 12px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .factory {
+    left: 5%;
+  }
+
+  .forest {
+    left: 38%;
+  }
+
+  .cattle {
+    left: 65%;
+  }
+
+  .ocean {
+    width: 55%;
+  }
+}
