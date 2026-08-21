@@ -1,132 +1,294 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador del Ciclo del Carbono - Proyecto Biología</title>
-    <link rel="stylesheet" href="./CSS.styles/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador del Ciclo del Carbono</title>
+  <link rel="stylesheet" href="./CSS.styles/styles.css" />
 </head>
+
 <body>
-    <div class="app-container">
-        <header class="main-header">
-            <h1>El Ciclo del Carbono en el Ecosistema de la Isla</h1>
-            <p>Explora cómo interactúan los seres vivos, los océanos, las ballenas y la actividad humana en el balance planetario.</p>
-        </header>
-        
-        <div class="main-layout">
-            <!-- LIENZO DE LA ISLA INTERACTIVA -->
-            <div class="island-canvas" id="canvas">
-                
-                <!-- Capa Atmosférica -->
-                <div class="atmosphere">
-                    <div class="co2-pool" id="co2-sky">CO₂ Atmosférico</div>
-                </div>
 
-                <!-- FLECHAS DE FLUJO INDICATIVAS SUTILES -->
-                <svg class="flow-arrows-layer" viewBox="0 0 800 550">
-                    <!-- Flecha: Auto/Fábrica -> Atmósfera -->
-                    <path d="M 160,260 Q 140,160 350,90" fill="none" stroke="rgba(231, 76, 60, 0.4)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
-                    <!-- Flecha: Vacas -> Atmósfera -->
-                    <path d="M 400,280 Q 420,180 440,95" fill="none" stroke="rgba(231, 76, 60, 0.4)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
-                    <!-- Flecha: Atmósfera -> Bosque -->
-                    <path d="M 430,95 Q 310,150 290,240" fill="none" stroke="rgba(46, 204, 113, 0.4)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
-                    <!-- Flecha: Ballena Playa -> Atmósfera -->
-                    <path d="M 600,320 Q 640,200 480,95" fill="none" stroke="rgba(231, 76, 60, 0.5)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
-                    <!-- Flecha: Atmósfera -> Algas Marinas -->
-                    <path d="M 460,95 Q 560,180 540,430" fill="none" stroke="rgba(46, 204, 113, 0.4)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
-                    <!-- Flecha: Ballena Fondo -> Sedimentos del fondo -->
-                    <path d="M 280,450 Q 250,470 200,480" fill="none" stroke="rgba(52, 152, 219, 0.5)" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+  <header class="topbar">
+    <div>
+      <h1>🌎 Ciclo del Carbono</h1>
+      <p>Simulador interactivo — Biología</p>
+    </div>
 
-                    <!-- Definición de la punta de la flecha -->
-                    <defs>
-                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(100,100,100,0.6)"/>
-                        </marker>
-                    </defs>
-                </svg>
+    <button id="resetBtn" class="reset-btn">
+      Reiniciar
+    </button>
+  </header>
 
-                <!-- ELEMENTOS DE LA ISLA (Hacer Clic) -->
-                
-                <!-- 1. Fábrica (Combustión) -->
-                <div class="element-node" data-step="fabrica" style="top: 38%; left: 8%;">
-                    <div class="graphic">🏭</div>
-                    <span>Complejo Industrial</span>
-                </div>
+  <main class="app">
 
-                <!-- 2. Calle con Automóvil -->
-                <div class="element-node" data-step="auto" style="top: 48%; left: 14%;">
-                    <div class="graphic car-anim">🚗💨</div>
-                    <span>Emisiones Vehiculares</span>
-                </div>
+    <!-- PANEL DE CONTROL -->
+    <aside class="control-panel">
 
-                <!-- 3. Bosque Mini (Fotosíntesis) -->
-                <div class="element-node" data-step="bosque" style="top: 40%; left: 32%;">
-                    <div class="graphic tree-sway">🌳🌲</div>
-                    <span>Bosque (Sumidero)</span>
-                </div>
+      <h2>⚙️ Variables</h2>
+      <p class="small">
+        Modificá la cantidad de cada elemento para observar cómo cambia
+        el balance de CO₂.
+      </p>
 
-                <!-- 4. Ganado / Vacas (Metano y Respiración) -->
-                <div class="element-node" data-step="ganado" style="top: 46%; left: 48%;">
-                    <div class="graphic animal-chew">🐄🐄</div>
-                    <span>Ganadería y Metano</span>
-                </div>
+      <div class="control-group">
+        <label for="factoryCount">
+          🏭 Fábricas
+          <span id="factoryCountValue">2</span>
+        </label>
+        <input id="factoryCount" type="range" min="0" max="20" value="2">
+      </div>
 
-                <!-- 5. Playa con Ballena Muerta (Bomba Biológica Superficial) -->
-                <div class="element-node" data-step="ballena_playa" style="top: 55%; left: 70%;">
-                    <div class="graphic gas-leak">🐋☠️</div>
-                    <span>Ballena Varada (Playa)</span>
-                </div>
+      <div class="control-group">
+        <label for="carCount">
+          🚗 Autos
+          <span id="carCountValue">5</span>
+        </label>
+        <input id="carCount" type="range" min="0" max="50" value="5">
+      </div>
 
-                <!-- 6. Mar con Algas (Sumidero Fotosintético Marino) -->
-                <div class="element-node" data-step="algas" style="top: 76%; left: 62%;">
-                    <div class="graphic wave-float">🌱🌿</div>
-                    <span>Algas y Fitoplancton</span>
-                </div>
+      <div class="control-group">
+        <label for="treeCount">
+          🌳 Plantas / árboles
+          <span id="treeCountValue">10</span>
+        </label>
+        <input id="treeCount" type="range" min="0" max="100" value="10">
+      </div>
 
-                <!-- 7. Mar Profundo: Ballena Muerta en el Fondo (Caída de Ballenas) -->
-                <div class="element-node" data-step="ballena_fondo" style="top: 78%; left: 30%;">
-                    <div class="graphic deep-sink">🐋🦴</div>
-                    <span>Secuestro (Fondo Marino)</span>
-                </div>
+      <div class="control-group">
+        <label for="cattleCount">
+          🐄 Ganado
+          <span id="cattleCountValue">5</span>
+        </label>
+        <input id="cattleCount" type="range" min="0" max="50" value="5">
+      </div>
 
-                <!-- 8. CO2 Concentrado en el Fondo del Mar (Bomba de Solubilidad) -->
-                <div class="element-node" data-step="co2_fondo" style="top: 86%; left: 10%;">
-                    <div class="graphic bubble-rise">🪨💧</div>
-                    <span>Carbono Inorgánico</span>
-                </div>
+      <div class="control-group">
+        <label for="algaeCount">
+          🌿 Algas
+          <span id="algaeCountValue">20</span>
+        </label>
+        <input id="algaeCount" type="range" min="0" max="100" value="20">
+      </div>
 
-                <!-- Capa de partículas interactivas -->
-                <div class="particles-layer" id="particles"></div>
+      <div class="control-group">
+        <label for="whaleBeachCount">
+          🐋 Ballenas muertas en playa
+          <span id="whaleBeachCountValue">1</span>
+        </label>
+        <input id="whaleBeachCount" type="range" min="0" max="10" value="1">
+      </div>
+
+      <div class="control-group">
+        <label for="whaleSeaCount">
+          🐋 Ballenas muertas en mar
+          <span id="whaleSeaCountValue">1</span>
+        </label>
+        <input id="whaleSeaCount" type="range" min="0" max="10" value="1">
+      </div>
+
+      <hr>
+
+      <div class="info-box">
+        <strong>Importante</strong>
+        <p>
+          Los valores de CO₂ son unidades didácticas creadas para
+          visualizar el balance. No representan toneladas, ppm ni
+          cantidades reales de moléculas.
+        </p>
+      </div>
+
+    </aside>
+
+    <!-- SIMULADOR -->
+    <section class="simulation">
+
+      <div class="sky">
+
+        <div class="cloud cloud1">☁️</div>
+        <div class="cloud cloud2">☁️</div>
+
+        <div class="atmosphere-label">
+          <span>☁️ ATMÓSFERA</span>
+          <strong id="atmosphereCO2">0</strong>
+          <small>unidades de CO₂</small>
+        </div>
+
+        <!-- FÁBRICA -->
+        <button class="scene-item factory"
+                data-info="factory"
+                aria-label="Fábricas">
+          🏭
+          <span>Fábricas</span>
+        </button>
+
+        <!-- CARRETERA -->
+        <div class="road">
+          <div class="road-line"></div>
+
+          <button class="scene-item car"
+                  data-info="car"
+                  aria-label="Auto">
+            🚗
+          </button>
+
+          <button class="scene-item car car2"
+                  data-info="car"
+                  aria-label="Auto">
+            🚙
+          </button>
+        </div>
+
+        <!-- BOSQUE -->
+        <button class="scene-item forest"
+                data-info="tree"
+                aria-label="Bosque">
+          <div class="trees">
+            🌳 🌳 🌳
+          </div>
+          <span>Bosque</span>
+        </button>
+
+        <!-- GANADO -->
+        <button class="scene-item cattle"
+                data-info="cattle"
+                aria-label="Ganado">
+          🐄 🐄
+          <span>Ganado</span>
+        </button>
+
+        <!-- FLECHAS -->
+        <div class="arrow arrow-factory">↑</div>
+        <div class="arrow arrow-car">↑</div>
+        <div class="arrow arrow-tree">↑</div>
+        <div class="arrow arrow-cattle">↑</div>
+
+        <!-- PLAYA -->
+        <div class="beach">
+
+          <div class="sand"></div>
+
+          <button class="scene-item dead-whale-beach"
+                  data-info="whaleBeach"
+                  aria-label="Ballena muerta en la playa">
+            🐋
+            <span>Descomposición</span>
+          </button>
+
+          <div class="co2-beach">
+            CO₂ ↑
+          </div>
+
+          <div class="arrow arrow-whale-beach">
+            ↑
+          </div>
+
+          <div class="ocean">
+
+            <div class="ocean-label">
+              🌊 OCÉANO
             </div>
 
-            <!-- PANEL DE INFORMACIÓN CIENTÍFICA -->
-            <aside class="info-sidebar">
-                <div id="default-msg">
-                    <h3>🔍 Explorador de Ecosistemas</h3>
-                    <p>Haz clic en cualquiera de los componentes animados de la isla para desplegar su rol biológico y analizar cómo altera el ciclo del carbono.</p>
-                </div>
-                <div id="active-content" class="hidden">
-                    <h2 id="info-title">Título del Elemento</h2>
-                    <div class="flow-tag" id="info-tag">Tipo de Proceso</div>
-                    
-                    <div class="section-block">
-                        <h4>¿Por qué es importante en el ciclo?</h4>
-                        <p id="info-importance">Explicación de su importancia...</p>
-                    </div>
+            <!-- BALLENA SUMERGIDA -->
+            <button class="scene-item dead-whale-sea"
+                    data-info="whaleSea"
+                    aria-label="Ballena muerta en el mar">
+              🐋
+              <span>Ballena</span>
+            </button>
 
-                    <div class="section-block">
-                        <h4>¿Cómo influye exactamente?</h4>
-                        <p id="info-influence">Mecanismo biológico detallado...</p>
-                    </div>
+            <!-- ALGAS -->
+            <button class="scene-item algae"
+                    data-info="algae"
+                    aria-label="Algas">
+              🌿 🌿 🌿
+              <span>Algas</span>
+            </button>
 
-                    <div class="impact-card" id="info-impact-container">
-                        <strong>⚠️ Alerta Medioambiental:</strong>
-                        <p id="info-environmental">Impacto ecológico...</p>
-                    </div>
-                </div>
-            </aside>
+            <!-- CO2 PROFUNDO -->
+            <div class="deep-co2">
+              <span>CO₂</span>
+              <span>CO₂</span>
+              <span>CO₂</span>
+              <span>CO₂</span>
+              <strong>CO₂ disuelto</strong>
+            </div>
+
+            <div class="arrow arrow-algae">
+              ↑
+            </div>
+
+            <div class="arrow arrow-deep">
+              ↓
+            </div>
+
+          </div>
         </div>
-    </div>
-    <script src="./java/script.js"></script>
+
+      </div>
+
+      <!-- PANEL DE INFORMACIÓN -->
+      <aside id="infoPanel" class="info-panel">
+
+        <button id="closeInfo" class="close-btn">
+          ×
+        </button>
+
+        <div id="infoIcon" class="info-icon">
+          🌎
+        </div>
+
+        <h2 id="infoTitle">
+          Seleccioná un elemento
+        </h2>
+
+        <p id="infoDescription">
+          Hacé click sobre una fábrica, auto, planta, vaca, alga o ballena
+          para conocer su función dentro del ciclo del carbono.
+        </p>
+
+        <div id="infoStats" class="info-stats"></div>
+
+      </aside>
+
+      <!-- BALANCE -->
+      <section class="dashboard">
+
+        <div class="metric">
+          <span>CO₂ emitido</span>
+          <strong id="totalEmitted">0</strong>
+        </div>
+
+        <div class="metric absorption">
+          <span>CO₂ absorbido</span>
+          <strong id="totalAbsorbed">0</strong>
+        </div>
+
+        <div class="metric balance">
+          <span>Balance neto</span>
+          <strong id="netBalance">0</strong>
+        </div>
+
+        <div class="metric temperature">
+          <span>🌡️ Temperatura didáctica</span>
+          <strong id="temperature">15.0 °C</strong>
+        </div>
+
+      </section>
+
+      <div class="explanation">
+        <strong>¿Cómo se calcula?</strong>
+        <span>
+          Balance neto = CO₂ emitido − CO₂ absorbido.
+          Si el resultado es positivo, queda más CO₂ en la atmósfera.
+          Si es negativo, la absorción supera a las emisiones.
+        </span>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="./java/script.js"></script>
 </body>
 </html>
