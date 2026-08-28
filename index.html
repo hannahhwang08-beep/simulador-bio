@@ -8,82 +8,54 @@
 </head>
 
 <body>
-
   <header class="topbar">
     <div>
       <h1>🌎 Ciclo del Carbono</h1>
       <p>Simulador interactivo — Biología</p>
     </div>
-
-    <button id="resetBtn" class="reset-btn">
-      Reiniciar
-    </button>
+    <button id="resetBtn" class="reset-btn">Reiniciar</button>
   </header>
 
   <main class="app">
-
-    <!-- PANEL DE CONTROL -->
     <aside class="control-panel">
-
       <h2>⚙️ Variables</h2>
       <p class="small">
         Modificá la cantidad de cada elemento para observar cómo cambia
-        el balance de CO₂.
+        el CO₂, la temperatura, el oxígeno y el océano.
       </p>
 
       <div class="control-group">
-        <label for="factoryCount">
-          🏭 Fábricas
-          <span id="factoryCountValue">2</span>
-        </label>
+        <label for="factoryCount">🏭 Fábricas <span id="factoryCountValue">2</span></label>
         <input id="factoryCount" type="range" min="0" max="20" value="2">
       </div>
 
       <div class="control-group">
-        <label for="carCount">
-          🚗 Autos
-          <span id="carCountValue">5</span>
-        </label>
+        <label for="carCount">🚗 Autos <span id="carCountValue">5</span></label>
         <input id="carCount" type="range" min="0" max="50" value="5">
       </div>
 
       <div class="control-group">
-        <label for="treeCount">
-          🌳 Plantas / árboles
-          <span id="treeCountValue">10</span>
-        </label>
+        <label for="treeCount">🌳 Plantas / árboles <span id="treeCountValue">10</span></label>
         <input id="treeCount" type="range" min="0" max="100" value="10">
       </div>
 
       <div class="control-group">
-        <label for="cattleCount">
-          🐄 Ganado
-          <span id="cattleCountValue">5</span>
-        </label>
+        <label for="cattleCount">🐄 Ganado <span id="cattleCountValue">5</span></label>
         <input id="cattleCount" type="range" min="0" max="50" value="5">
       </div>
 
       <div class="control-group">
-        <label for="algaeCount">
-          🌿 Algas
-          <span id="algaeCountValue">20</span>
-        </label>
+        <label for="algaeCount">🌿 Algas <span id="algaeCountValue">20</span></label>
         <input id="algaeCount" type="range" min="0" max="100" value="20">
       </div>
 
       <div class="control-group">
-        <label for="whaleBeachCount">
-          🐋 Ballenas muertas en playa
-          <span id="whaleBeachCountValue">1</span>
-        </label>
+        <label for="whaleBeachCount">🐋 Ballenas muertas en playa <span id="whaleBeachCountValue">1</span></label>
         <input id="whaleBeachCount" type="range" min="0" max="10" value="1">
       </div>
 
       <div class="control-group">
-        <label for="whaleSeaCount">
-          🐋 Ballenas muertas en mar
-          <span id="whaleSeaCountValue">1</span>
-        </label>
+        <label for="whaleSeaCount">🐋 Ballenas muertas en mar <span id="whaleSeaCountValue">1</span></label>
         <input id="whaleSeaCount" type="range" min="0" max="10" value="1">
       </div>
 
@@ -92,19 +64,23 @@
       <div class="info-box">
         <strong>Importante</strong>
         <p>
-          Los valores de CO₂ son unidades didácticas creadas para
-          visualizar el balance. No representan toneladas, ppm ni
-          cantidades reales de moléculas.
+          Los valores de CO₂ son unidades didácticas. No representan
+          ppm, toneladas ni cantidades reales de moléculas.
         </p>
       </div>
 
+      <div class="threshold-box">
+        <strong>🌊 Umbral del océano</strong>
+        <p>
+          Cuando el CO₂ atmosférico supera <b>300 unidades</b>, una parte
+          comienza a pasar al océano. Al aumentar el CO₂ disuelto, el pH
+          disminuye y se afecta la vida marina.
+        </p>
+      </div>
     </aside>
 
-    <!-- SIMULADOR -->
     <section class="simulation">
-
       <div class="sky">
-
         <div class="cloud cloud1">☁️</div>
         <div class="cloud cloud2">☁️</div>
 
@@ -112,148 +88,105 @@
           <span>☁️ ATMÓSFERA</span>
           <strong id="atmosphereCO2">0</strong>
           <small>unidades de CO₂</small>
+          <div id="co2Status" class="co2-status">Nivel estable</div>
         </div>
 
-        <!-- FÁBRICA -->
-        <button class="scene-item factory"
-                data-info="factory"
-                aria-label="Fábricas">
+        <button class="scene-item factory" data-info="factory" aria-label="Fábricas">
           🏭
           <span>Fábricas</span>
         </button>
 
-        <!-- CARRETERA -->
         <div class="road">
           <div class="road-line"></div>
-
-          <button class="scene-item car"
-                  data-info="car"
-                  aria-label="Auto">
-            🚗
-          </button>
-
-          <button class="scene-item car car2"
-                  data-info="car"
-                  aria-label="Auto">
-            🚙
-          </button>
+          <button class="scene-item car" data-info="car" aria-label="Auto">🚗</button>
+          <button class="scene-item car car2" data-info="car" aria-label="Auto">🚙</button>
         </div>
 
-        <!-- BOSQUE -->
-        <button class="scene-item forest"
-                data-info="tree"
-                aria-label="Bosque">
+        <button class="scene-item forest" data-info="tree" aria-label="Bosque">
           <div class="trees">
-            🌳 🌳 🌳
+            <span>🌳</span><span>🌳</span><span>🌳</span>
           </div>
           <span>Bosque</span>
         </button>
 
-        <!-- GANADO -->
-        <button class="scene-item cattle"
-                data-info="cattle"
-                aria-label="Ganado">
-          🐄 🐄
+        <button class="scene-item cattle" data-info="cattle" aria-label="Ganado">
+          <span>🐄</span><span>🐄</span>
           <span>Ganado</span>
         </button>
 
-        <!-- FLECHAS -->
-        <div class="arrow arrow-factory">↑</div>
-        <div class="arrow arrow-car">↑</div>
-        <div class="arrow arrow-tree">↑</div>
-        <div class="arrow arrow-cattle">↑</div>
+        <!--
+          Estos contenedores siguen existiendo para conservar
+          la estructura original. Ahora los puntos se generan
+          dinámicamente desde JavaScript.
+        -->
+        <div class="co2-flow flow-factory emission" aria-hidden="true"></div>
+        <div class="co2-flow flow-car emission" aria-hidden="true"></div>
+        <div class="co2-flow flow-tree absorption" aria-hidden="true"></div>
+        <div class="co2-flow flow-cattle emission" aria-hidden="true"></div>
 
-        <!-- PLAYA -->
         <div class="beach">
-
           <div class="sand"></div>
 
-          <button class="scene-item dead-whale-beach"
-                  data-info="whaleBeach"
-                  aria-label="Ballena muerta en la playa">
+          <button class="scene-item dead-whale-beach" data-info="whaleBeach" aria-label="Ballena muerta en la playa">
             🐋
             <span>Descomposición</span>
           </button>
 
-          <div class="co2-beach">
-            CO₂ ↑
-          </div>
-
-          <div class="arrow arrow-whale-beach">
-            ↑
-          </div>
+          <div class="co2-flow flow-whale-beach emission" aria-hidden="true"></div>
 
           <div class="ocean">
+            <div class="ocean-label">🌊 OCÉANO</div>
 
-            <div class="ocean-label">
-              🌊 OCÉANO
-            </div>
-
-            <!-- BALLENA SUMERGIDA -->
-            <button class="scene-item dead-whale-sea"
-                    data-info="whaleSea"
-                    aria-label="Ballena muerta en el mar">
+            <button class="scene-item dead-whale-sea" data-info="whaleSea" aria-label="Ballena muerta en el mar">
               🐋
               <span>Ballena</span>
             </button>
 
-            <!-- ALGAS -->
-            <button class="scene-item algae"
-                    data-info="algae"
-                    aria-label="Algas">
-              🌿 🌿 🌿
+            <button class="scene-item algae" data-info="algae" aria-label="Algas">
+              <span>🌿</span><span>🌿</span><span>🌿</span>
               <span>Algas</span>
             </button>
 
-            <!-- CO2 PROFUNDO -->
+            <button class="scene-item coral" data-info="coral" aria-label="Corales">
+              <span>🪸</span><span>🪸</span>
+              <span>Corales</span>
+            </button>
+
+            <button class="scene-item snails" data-info="snail" aria-label="Caracoles de mar">
+              <span>🐚</span><span>🐚</span>
+              <span>Caracoles</span>
+            </button>
+
             <div class="deep-co2">
-              <span>CO₂</span>
-              <span>CO₂</span>
-              <span>CO₂</span>
-              <span>CO₂</span>
+              <span>CO₂</span><span>CO₂</span><span>CO₂</span><span>CO₂</span>
               <strong>CO₂ disuelto</strong>
             </div>
 
-            <div class="arrow arrow-algae">
-              ↑
-            </div>
+            <div class="co2-flow flow-algae absorption" aria-hidden="true"></div>
+            <div class="co2-flow flow-ocean absorption" aria-hidden="true"></div>
+            <div class="co2-flow flow-whale-sea emission" aria-hidden="true"></div>
 
-            <div class="arrow arrow-deep">
-              ↓
+            <div class="ocean-stats">
+              <div><span>CO₂ disuelto</span><strong id="dissolvedCO2">0</strong></div>
+              <div><span>pH</span><strong id="oceanPH">8.2</strong></div>
+              <div><span>O₂</span><strong id="oceanOxygen">100%</strong></div>
             </div>
-
           </div>
         </div>
-
       </div>
 
-      <!-- PANEL DE INFORMACIÓN -->
       <aside id="infoPanel" class="info-panel">
-
-        <button id="closeInfo" class="close-btn">
-          ×
-        </button>
-
-        <div id="infoIcon" class="info-icon">
-          🌎
-        </div>
-
-        <h2 id="infoTitle">
-          Seleccioná un elemento
-        </h2>
-
+        <button id="closeInfo" class="close-btn">×</button>
+        <div id="infoIcon" class="info-icon">🌎</div>
+        <h2 id="infoTitle">Seleccioná un elemento</h2>
         <p id="infoDescription">
-          Hacé click sobre una fábrica, auto, planta, vaca, alga o ballena
-          para conocer su función dentro del ciclo del carbono.
+          Hacé click sobre una fábrica, auto, planta, vaca, alga, coral,
+          caracol o ballena para conocer su función dentro del ciclo del carbono.
         </p>
-
         <div id="infoStats" class="info-stats"></div>
-
       </aside>
 
-      <!-- BALANCE -->
       <section class="dashboard">
-
         <div class="metric">
           <span>CO₂ emitido</span>
           <strong id="totalEmitted">0</strong>
@@ -265,28 +198,36 @@
         </div>
 
         <div class="metric balance">
-          <span>Balance neto</span>
+          <span>CO₂ atmosférico</span>
           <strong id="netBalance">0</strong>
         </div>
 
         <div class="metric temperature">
-          <span>🌡️ Temperatura didáctica</span>
-          <strong id="temperature">15.0 °C</strong>
+          <span>🌡️ Aumento de temperatura</span>
+          <strong id="temperature">+0 °C</strong>
         </div>
 
+        <div class="metric oxygen">
+          <span>🫧 Oxígeno</span>
+          <strong id="oxygen">100%</strong>
+        </div>
       </section>
+
+      <div id="ecosystemMessage" class="ecosystem-message">
+        El ecosistema se encuentra en condiciones normales.
+      </div>
 
       <div class="explanation">
         <strong>¿Cómo se calcula?</strong>
         <span>
-          Balance neto = CO₂ emitido − CO₂ absorbido.
-          Si el resultado es positivo, queda más CO₂ en la atmósfera.
-          Si es negativo, la absorción supera a las emisiones.
+          Balance = CO₂ emitido − CO₂ absorbido. En este modelo, el CO₂ positivo
+          se acumula en la atmósfera. Cada 100 unidades de CO₂ atmosférico
+          representan didácticamente 1 °C de aumento. Al superar 300 unidades,
+          parte del CO₂ pasa al océano: baja el pH y se reducen el oxígeno y
+          algunos organismos marinos.
         </span>
       </div>
-
     </section>
-
   </main>
 
   <script src="./java/script.js"></script>
