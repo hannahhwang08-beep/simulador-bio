@@ -3,11 +3,9 @@
 }
 
 :root {
-  --heat: 0;
-  --red: #e53935;
-  --green: #2e9d50;
   --dark: #18324a;
   --card: rgba(255,255,255,.94);
+  --green: #2e9d50;
 }
 
 body {
@@ -21,6 +19,11 @@ button,
 input {
   font: inherit;
 }
+
+
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
 
 .topbar {
   min-height: 78px;
@@ -52,9 +55,14 @@ input {
   cursor: pointer;
 }
 
+
+/* =========================================================
+   ESTRUCTURA
+   ========================================================= */
+
 .app {
   display: grid;
-  grid-template-columns: 280px minmax(700px, 1fr);
+  grid-template-columns: 280px minmax(700px,1fr);
   gap: 18px;
   max-width: 1500px;
   margin: 18px auto;
@@ -130,19 +138,16 @@ hr {
   margin: 6px 0 0;
 }
 
-.simulation {
-  min-width: 0;
-}
+
+/* =========================================================
+   PAISAJE
+   ========================================================= */
 
 .sky {
-  --heat-color: rgba(255, 105, 70, var(--heat));
-
+  --heat: 0;
   min-height: 690px;
-
   position: relative;
-
   overflow: hidden;
-
   border-radius: 18px;
 
   background:
@@ -159,25 +164,20 @@ hr {
 
 .sky::after {
   content: "";
-
   position: absolute;
-
   inset: 0;
 
-  background: var(--heat-color);
+  background:
+    rgba(255,105,70,var(--heat));
 
   pointer-events: none;
-
-  z-index: 0;
+  z-index: 30;
 }
 
 .cloud {
   position: absolute;
-
   font-size: 44px;
-
   opacity: .8;
-
   z-index: 1;
 }
 
@@ -191,27 +191,22 @@ hr {
   top: 80px;
 }
 
+
+/* =========================================================
+   ATMÓSFERA
+   ========================================================= */
+
 .atmosphere-label {
   position: absolute;
-
-  z-index: 5;
-
+  z-index: 10;
   top: 22px;
-
   left: 50%;
-
   transform: translateX(-50%);
-
   min-width: 220px;
-
   text-align: center;
-
   background: rgba(255,255,255,.92);
-
   padding: 12px 18px;
-
   border-radius: 14px;
-
   box-shadow: 0 4px 15px rgba(0,0,0,.1);
 }
 
@@ -222,17 +217,13 @@ hr {
 
 .atmosphere-label strong {
   display: block;
-
   font-size: 28px;
-
   margin: 3px 0;
 }
 
 .co2-status {
   font-size: 12px;
-
   font-weight: 700;
-
   color: #25753c;
 }
 
@@ -244,21 +235,19 @@ hr {
   color: #c62828;
 }
 
+
+/* =========================================================
+   ELEMENTOS DEL PAISAJE
+   ========================================================= */
+
 .scene-item {
   position: absolute;
-
-  z-index: 4;
-
+  z-index: 5;
   border: 0;
-
   background: transparent;
-
   cursor: pointer;
-
   font-size: 45px;
-
   text-align: center;
-
   transition: .3s ease;
 }
 
@@ -268,54 +257,82 @@ hr {
 
 .scene-item > span:last-child {
   display: block;
-
   font-size: 13px;
-
   font-weight: 700;
-
   color: #294656;
 }
 
 
-/* =====================================================
-   ELEMENTOS DEL PAISAJE
-   ===================================================== */
+/* =========================================================
+   ELEMENTOS TERRESTRES
+   ========================================================= */
 
-/*
-  Fábrica más cerca del suelo.
-*/
 .factory {
-  left: 7%;
-  top: 250px;
+  left: 5%;
+  top: 265px;
+  filter: drop-shadow(0 7px 4px rgba(0,0,0,.18));
+}
+
+.forest {
+  left: 23%;
+  top: 258px;
+}
+
+.cattle {
+  right: 7%;
+  top: 267px;
+}
+
+.housing {
+  left: 69%;
+  top: 265px;
+}
+
+.energy {
+  left: 50%;
+  top: 255px;
+}
+
+.deforestation {
+  left: 35%;
+  top: 270px;
+}
+
+.cattle::after,
+.housing::after,
+.energy::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 17px;
+  width: 80px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(75,60,35,.18);
+  transform: translateX(-50%);
+  z-index: -1;
 }
 
 
-/*
-  Carretera.
-*/
+/* =========================================================
+   CARRETERA
+   ========================================================= */
+
 .road {
   position: absolute;
-
-  z-index: 2;
-
+  z-index: 3;
   left: 0;
   right: 0;
-
   top: 330px;
-
   height: 90px;
-
   background: #48535a;
 }
 
 .road-line {
   position: absolute;
-
   top: 42px;
-
   left: 0;
   right: 0;
-
   border-top: 5px dashed #f7dd69;
 }
 
@@ -330,62 +347,613 @@ hr {
 }
 
 
-/*
-  Árboles más cerca del suelo.
-*/
-.forest {
-  left: 25%;
+/* =========================================================
+   ENERGÍA FÓSIL
+   ========================================================= */
+
+.power-plant {
+  position: relative;
+  display: block;
+  width: 100px;
+  height: 70px;
+  margin: auto;
+}
+
+.plant-building {
+  position: absolute;
+  left: 15px;
+  bottom: 10px;
+  width: 68px;
+  height: 43px;
+  border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(#68757c,#3f4c52);
+  border: 3px solid #334047;
+}
+
+.plant-building::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  background: #f2cf6b;
+  box-shadow:
+    17px 0 #f2cf6b,
+    34px 0 #f2cf6b,
+    0 17px #f2cf6b,
+    17px 17px #f2cf6b,
+    34px 17px #f2cf6b;
+}
+
+.plant-chimney {
+  position: absolute;
+  bottom: 38px;
+  width: 13px;
+  height: 40px;
+  border-radius: 3px 3px 0 0;
+  background: #626c70;
+  border: 2px solid #3e494d;
+}
+
+.chimney-a {
+  left: 22px;
+}
+
+.chimney-b {
+  right: 17px;
+  height: 51px;
+}
+
+.plant-smoke {
+  position: absolute;
+  font-size: 18px;
+  color: rgba(90,90,90,.55);
+  animation: smokeMove 2.4s infinite ease-in-out;
+}
+
+.smoke-a {
+  left: 15px;
+  top: -1px;
+}
+
+.smoke-b {
+  right: 8px;
+  top: -12px;
+  animation-delay: .8s;
+}
+
+@keyframes smokeMove {
+  from {
+    transform: translateY(4px);
+    opacity: .35;
+  }
+
+  to {
+    transform: translateY(-15px);
+    opacity: .75;
+  }
+}
+
+
+/* =========================================================
+   DEFORESTACIÓN
+   MODIFICACIÓN:
+   LOS TRONCOS SOLO APARECEN CUANDO HAY DEFORESTACIÓN
+   ========================================================= */
+
+.deforestation-logs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+
+  min-height: 52px;
+
+  font-size: 31px;
+  line-height: 1;
+
+  opacity: 0;
+  transform: translateY(8px) scale(.8);
+
+  transition:
+    opacity .45s ease,
+    transform .45s ease;
+
+  pointer-events: none;
+}
+
+.deforestation-logs span {
+  display: inline-block;
+  filter: drop-shadow(0 4px 3px rgba(0,0,0,.2));
+}
+
+.deforestation.logs-visible .deforestation-logs {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* MODIFICACIÓN:
+   El texto "Deforestación" acompaña a los troncos
+   y aparece cuando hay deforestación. */
+.deforestation > span:last-child {
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+
+.deforestation.logs-visible > span:last-child {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   INCENDIOS
+   MODIFICACIÓN:
+   NO HAY CONTROL MANUAL.
+   APARECEN AUTOMÁTICAMENTE CON LA TEMPERATURA.
+   ========================================================= */
+
+.fire {
+  right: 19%;
   top: 255px;
+  width: 100px;
+  opacity: 0;
+  z-index: 7;
+
+  transition:
+    opacity .45s ease,
+    transform .35s ease;
 }
 
-.trees {
-  white-space: nowrap;
+/* MODIFICACIÓN:
+   Ahora se utiliza directamente el emoji de fuego. */
+.fire-emoji {
+  display: block;
+  font-size: 58px;
+  line-height: 1;
+  margin: 0 auto 2px;
+}
+
+/* Código anterior conservado para no alterar
+   el resto del diseño, aunque ya no se utiliza. */
+.fire-art {
+  position: relative;
+  display: block;
+  width: 90px;
+  height: 64px;
+  margin: auto;
+}
+
+.burning-log {
+  position: absolute;
+  left: 16px;
+  bottom: 7px;
+  width: 58px;
+  height: 13px;
+  border-radius: 12px;
+  background: #713b22;
+  transform: rotate(-7deg);
+}
+
+.flame {
+  position: absolute;
+  bottom: 13px;
+  border-radius: 55% 45% 60% 40%;
+  transform-origin: bottom center;
+  animation: flameMove .55s ease-in-out infinite alternate;
+}
+
+.flame-a {
+  left: 28px;
+  width: 31px;
+  height: 49px;
+  background: #e85d22;
+}
+
+.flame-b {
+  left: 42px;
+  width: 25px;
+  height: 39px;
+  background: #ff9d28;
+  animation-delay: .15s;
+}
+
+.flame-c {
+  left: 49px;
+  bottom: 16px;
+  width: 16px;
+  height: 28px;
+  background: #ffe36b;
+  animation-delay: .28s;
+}
+
+@keyframes flameMove {
+  from {
+    transform: rotate(-5deg) scaleY(.94);
+  }
+
+  to {
+    transform: rotate(6deg) scaleY(1.06);
+  }
+}
+
+.fire-active {
+  opacity: 1;
+  animation: firePulse .9s ease-in-out infinite alternate;
+}
+
+@keyframes firePulse {
+  from {
+    filter: brightness(.95);
+  }
+
+  to {
+    filter: brightness(1.15);
+  }
 }
 
 
-/*
-  Ganado más cerca del suelo.
-*/
-.cattle {
-  right: 7%;
-  top: 250px;
-}
-
+/* =========================================================
+   PLAYA
+   ========================================================= */
 
 .beach {
   position: absolute;
-
   left: 0;
   right: 0;
-
   bottom: 0;
-
   height: 300px;
-
   z-index: 1;
 }
 
 .sand {
   position: absolute;
-
   left: 0;
   right: 0;
-
   top: 0;
-
   height: 65px;
-
   background: #f0d89a;
 }
 
-.ocean {
+
+/* =========================================================
+   HUMEDAL
+   MODIFICACIÓN:
+   MÁS ARRIBA Y ANIMADO
+   ========================================================= */
+
+.wetland {
+  left: 54%;
+  top: 105px;
+  width: 150px;
+  height: 82px;
+  font-size: 12px;
+  z-index: 8;
+
+  --melt: 0;
+
+  transform:
+    scale(calc(1 - var(--melt) * .38));
+
+  transform-origin: center bottom;
+
+  opacity:
+    calc(1 - var(--melt) * .55);
+
+  transition:
+    transform .7s ease,
+    opacity .7s ease;
+}
+
+.wetland-art {
+  position: relative;
+  display: block;
+  width: 145px;
+  height: 58px;
+  margin: auto;
+
+  border-radius: 48% 52% 45% 55%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #8fc58a 0 35%,
+      #6e9d69 36% 100%
+    );
+
+  border: 3px solid rgba(62,105,60,.75);
+
+  box-shadow:
+    inset 0 -12px 0 rgba(55,102,72,.2),
+    0 7px 5px rgba(0,0,0,.12);
+
+  overflow: hidden;
+}
+
+.wetland-water {
+  position: absolute;
+  left: 23px;
+  bottom: 9px;
+  width: 98px;
+  height: 24px;
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      #8fd6df,
+      #4c9fb0
+    );
+
+  animation:
+    wetlandRipple 2.2s ease-in-out infinite alternate;
+}
+
+.reed {
+  position: absolute;
+  bottom: 22px;
+  width: 4px;
+  height: 34px;
+  border-radius: 5px;
+  background: #4d743b;
+  animation:
+    reedSway 2.4s ease-in-out infinite alternate;
+}
+
+.reed::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -3px;
+  width: 10px;
+  height: 8px;
+  border-radius: 50%;
+  background: #77542c;
+}
+
+.reed-a {
+  left: 18px;
+}
+
+.reed-b {
+  left: 38px;
+  height: 40px;
+  animation-delay: .4s;
+}
+
+.reed-c {
+  right: 22px;
+  height: 31px;
+  animation-delay: .8s;
+}
+
+.marsh-plant {
+  position: absolute;
+  bottom: 10px;
+  font-size: 25px;
+  animation:
+    marshBob 2.1s ease-in-out infinite alternate;
+}
+
+.plant-a {
+  left: 7px;
+}
+
+.plant-b {
+  right: 5px;
+  animation-delay: .6s;
+}
+
+@keyframes wetlandRipple {
+  from {
+    transform: scaleX(.96);
+  }
+
+  to {
+    transform: scaleX(1.04);
+  }
+}
+
+@keyframes reedSway {
+  from {
+    transform: rotate(-4deg);
+  }
+
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes marshBob {
+  from {
+    transform: translateY(1px);
+  }
+
+  to {
+    transform: translateY(-3px);
+  }
+}
+
+
+/* =========================================================
+   GLACIAR
+   MODIFICACIÓN:
+   MÁS ABAJO Y SIN TEXTO DE CALENTAMIENTO
+   ========================================================= */
+
+.polar-ice {
+  --melt: 0;
+
   position: absolute;
 
-  left: 0;
-  right: 0;
+  right: 7%;
+  top: 18px;
 
+  width: 185px;
+  height: 115px;
+
+  z-index: 12;
+
+  /* MODIFICACIÓN:
+     El glaciar se reduce visiblemente a medida que se derrite. */
+  transform:
+    translateX(0)
+    scale(
+      calc(1 - var(--melt) * .48)
+    );
+
+  transform-origin: center bottom;
+
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+
+  transition:
+    transform .7s ease,
+    opacity .7s ease;
+}
+
+.glacier-art {
+  position: relative;
+  width: 100%;
+  height: 82px;
+
+  filter:
+    drop-shadow(0 7px 5px rgba(0,0,0,.14));
+}
+
+.glacier-mountain {
+  position: absolute;
   bottom: 0;
 
+  clip-path:
+    polygon(
+      0 100%,
+      20% 55%,
+      36% 72%,
+      54% 20%,
+      72% 62%,
+      86% 44%,
+      100% 100%
+    );
+}
+
+.mountain-back {
+  left: 5px;
+  width: 165px;
+  height: 72px;
+  background: #b8d9e7;
+}
+
+.mountain-main {
+  left: 20px;
+  width: 145px;
+  height: 76px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #eefaff 0 35%,
+      #9bc8dc 36% 70%,
+      #5e9db8 71%
+    );
+}
+
+.glacier-snow {
+  position: absolute;
+  left: 42px;
+  top: 7px;
+  width: 66px;
+  height: 35px;
+
+  background: white;
+
+  clip-path:
+    polygon(
+      50% 0,
+      100% 100%,
+      72% 70%,
+      50% 100%,
+      25% 65%,
+      0 100%
+    );
+}
+
+.glacier-crack {
+  position: absolute;
+  width: 3px;
+  height: 24px;
+  background: rgba(50,110,140,.5);
+}
+
+.crack-a {
+  left: 84px;
+  top: 38px;
+  transform: rotate(18deg);
+}
+
+.crack-b {
+  left: 101px;
+  top: 48px;
+  transform: rotate(-13deg);
+}
+
+.glacier-water {
+  position: absolute;
+  left: 52px;
+  bottom: -2px;
+  width: 85px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background: #62b9d2;
+
+  opacity:
+    calc(.35 + var(--melt) * .65);
+
+  transform:
+    scaleX(calc(.75 + var(--melt) * .5));
+
+  transition: .7s ease;
+}
+
+.glacier-caption {
+
+  color: #294656;
+
+  text-align: center;
+}
+
+.glacier-caption strong {
+  font-size: 13px;
+}
+
+/* No se muestra texto secundario */
+.glacier-caption small {
+  display: none !important;
+}
+
+.polar-ice.melting .glacier-art {
+  transform:
+    scaleY(calc(1 - var(--melt) * .22))
+    scaleX(calc(1 - var(--melt) * .42));
+
+  transform-origin:
+    center bottom;
+}
+
+
+/* =========================================================
+   OCÉANO
+   ========================================================= */
+
+.ocean {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 235px;
 
   overflow: hidden;
@@ -400,19 +968,48 @@ hr {
 
 .ocean-label {
   position: absolute;
-
   top: 8px;
-
   left: 50%;
-
   transform: translateX(-50%);
 
   color: white;
-
   font-weight: 800;
-
   z-index: 5;
 }
+
+
+/* =========================================================
+   VIDA MARINA
+   MODIFICACIÓN:
+   TODOS JUNTOS EN LA ZONA DE ALGAS
+   ========================================================= */
+
+.algae {
+  left: 25%;
+  bottom: 42px;
+  font-size: 34px;
+  z-index: 8;
+}
+
+.coral {
+  left: 34%;
+  bottom: 40px;
+  font-size: 34px;
+  z-index: 8;
+}
+
+.snails {
+  left: 43%;
+  right: auto;
+  bottom: 40px;
+  font-size: 32px;
+  z-index: 8;
+}
+
+
+/* =========================================================
+   BALLENAS / DESCOMPOSICIÓN
+   ========================================================= */
 
 .dead-whale-beach {
   left: 8%;
@@ -426,77 +1023,109 @@ hr {
   font-size: 38px;
 }
 
-.algae {
-  left: 31%;
-  bottom: 40px;
-  font-size: 34px;
+.decomposition-whale {
+  display: block;
+  font-size: 38px;
 }
 
-.coral {
-  left: 52%;
-  bottom: 30px;
-  font-size: 34px;
-}
 
-.snails {
-  right: 8%;
-  bottom: 37px;
-  font-size: 32px;
-}
+/* =========================================================
+   CO₂ DISUELTO
+   ========================================================= */
 
 .deep-co2 {
   position: absolute;
-
-  left: 44%;
-
-  bottom: 5px;
-
-  color: rgba(255,255,255,.65);
+  right: 25px;
+  top: 60px;
 
   display: flex;
+  flex-direction: column;
+  gap: 5px;
 
-  gap: 8px;
-
-  flex-wrap: wrap;
-
-  width: 125px;
-
-  font-size: 12px;
-
-  text-align: center;
+  color: rgba(255,255,255,.5);
+  font-size: 13px;
 }
 
 .deep-co2 strong {
-  width: 100%;
   color: white;
+  font-size: 11px;
 }
+
+
+/* =========================================================
+   NIVEL DEL MAR
+   MODIFICACIÓN:
+   ESQUINA INFERIOR IZQUIERDA
+   ========================================================= */
+
+.sea-level {
+  position: absolute;
+
+  left: 14px;
+  bottom: 14px;
+
+  z-index: 20;
+
+  min-width: 105px;
+
+  padding: 6px 9px;
+
+  border-radius: 9px;
+
+  background: rgba(0,0,0,.27);
+
+  color: white;
+
+  text-align: center;
+
+  font-size: 10px;
+}
+
+.sea-level span,
+.sea-level strong,
+.sea-level small {
+  display: block;
+}
+
+.sea-level strong {
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.sea-level small {
+  font-size: 8px;
+  opacity: .8;
+}
+
+
+/* =========================================================
+   ESTADÍSTICAS DEL OCÉANO
+   ========================================================= */
 
 .ocean-stats {
   position: absolute;
 
-  right: 12px;
-
-  top: 12px;
+  right: 15px;
+  bottom: 12px;
 
   display: flex;
-
   gap: 8px;
 
-  z-index: 5;
+  z-index: 10;
 }
 
 .ocean-stats div {
-  min-width: 78px;
+  min-width: 70px;
 
-  padding: 6px 8px;
+  padding: 7px;
 
-  border-radius: 9px;
+  border-radius: 8px;
 
-  background: rgba(0,0,0,.25);
-
-  color: white;
+  background: rgba(255,255,255,.88);
 
   text-align: center;
+
+  font-size: 10px;
 }
 
 .ocean-stats span,
@@ -504,170 +1133,156 @@ hr {
   display: block;
 }
 
-.ocean-stats span {
-  font-size: 10px;
-}
-
 .ocean-stats strong {
   font-size: 15px;
 }
 
 
-/* =====================================================
-   CÍRCULOS DE CO₂
-   ===================================================== */
+/* =========================================================
+   FLUJOS
+   ========================================================= */
 
-/*
-  Los antiguos recorridos quedan como contenedores
-  invisibles. Las partículas reales se generan
-  desde JavaScript.
-*/
 .co2-flow {
   position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 25;
+}
 
+.co2-flow.emission {
+  background: #e53935;
+}
+
+.co2-flow.absorption {
+  background: #2e9d50;
+}
+
+
+/* =========================================================
+   MINI CÍRCULOS DE CO₂ AL HACER CLICK
+   MODIFICACIÓN:
+   Emisiones: del elemento hacia ATMÓSFERA.
+   Absorciones: de ATMÓSFERA hacia el elemento.
+   ========================================================= */
+
+.co2-particle-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 28;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.co2-particle {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
 
   opacity: 0;
 
-  width: 0;
-  height: 0;
-}
-
-
-/*
-  Contenedor que contiene las moléculas de un recorrido.
-*/
-.particle-flow-container {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
   pointer-events: none;
 
-  z-index: 6;
+  will-change: transform, opacity;
+
+  animation:
+    co2ParticleFly 1.35s ease-in-out forwards;
+  animation-delay: var(--delay);
+}
+
+.co2-particle.emission {
+  background: #e53935;
+}
+
+.co2-particle.absorption {
+  background: #2e9d50;
+}
+
+@keyframes co2ParticleFly {
+
+  0% {
+    opacity: 0;
+
+    transform:
+      translate(
+        var(--start-x),
+        var(--start-y)
+      )
+      scale(.65);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(
+        var(--end-x),
+        var(--end-y)
+      )
+      scale(.9);
+  }
+
 }
 
 
-/*
-  Cada pequeño círculo representa una molécula
-  didáctica de CO₂.
-*/
-.co2-particle {
-  position: absolute;
-
-  width: 11px;
-  height: 11px;
-
-  border-radius: 50%;
-
-  pointer-events: none;
-
-  z-index: 7;
-
-  margin: 0;
-}
-
-
-/*
-  Moléculas que se emiten hacia la atmósfera.
-*/
-.red-particle {
-  background: var(--red);
-
-  box-shadow:
-    0 0 6px rgba(229,57,53,.65),
-    0 0 12px rgba(229,57,53,.25);
-}
-
-
-/*
-  Moléculas que son absorbidas.
-*/
-.green-particle {
-  background: var(--green);
-
-  box-shadow:
-    0 0 6px rgba(46,157,80,.65),
-    0 0 12px rgba(46,157,80,.25);
-}
-
-
-/*
-  Los elementos mantienen sus efectos originales.
-*/
-.scene-item.affected {
-  filter: saturate(.55) brightness(.9);
-  opacity: .72;
-}
-
-.scene-item.severe,
-.scene-item.dead {
-  filter: grayscale(1);
-  opacity: .42;
-}
-
-
-/* =====================================================
+/* =========================================================
    PANEL DE INFORMACIÓN
-   ===================================================== */
+   ========================================================= */
 
 .info-panel {
-  position: fixed;
+  margin-top: 16px;
 
-  z-index: 20;
-
-  right: 22px;
-
-  top: 95px;
-
-  width: min(
-    360px,
-    calc(100vw - 44px)
-  );
-
-  padding: 22px;
+  background: white;
 
   border-radius: 16px;
 
-  background: rgba(255,255,255,.98);
+  padding: 20px;
 
   box-shadow:
-    0 10px 35px rgba(0,0,0,.2);
+    0 5px 20px rgba(0,0,0,.08);
 
-  transform: translateX(120%);
+  display: none;
 
-  transition: transform .3s ease;
+  position: relative;
 }
 
 .info-panel.visible {
-  transform: translateX(0);
+  display: block;
 }
 
 .close-btn {
   position: absolute;
 
-  right: 10px;
-
-  top: 8px;
+  right: 12px;
+  top: 10px;
 
   border: 0;
-
   background: transparent;
 
-  font-size: 28px;
+  font-size: 25px;
 
   cursor: pointer;
 }
 
 .info-icon {
-  font-size: 50px;
+  font-size: 45px;
 }
 
 .info-panel h2 {
-  margin: 5px 0 8px;
+  margin-bottom: 8px;
 }
 
 .info-panel p {
@@ -676,57 +1291,40 @@ hr {
 
 .info-stats {
   display: grid;
-
-  gap: 7px;
-
-  font-size: 14px;
+  gap: 8px;
 }
 
-.info-stats > div {
-  padding: 7px 9px;
-
-  border-radius: 7px;
-
-  background: #f1f5f7;
-}
-
-.stat-emission {
-  color: #b62926;
-}
-
-.stat-absorption {
-  color: #28783e;
-}
-
-.state-stat {
-  background: #fff1d9 !important;
+.info-stats div {
+  padding: 8px;
+  border-radius: 8px;
+  background: #eef5f8;
 }
 
 
-/* =====================================================
+/* =========================================================
    DASHBOARD
-   ===================================================== */
+   ========================================================= */
 
 .dashboard {
   display: grid;
 
   grid-template-columns:
-    repeat(5, 1fr);
+    repeat(5,1fr);
 
   gap: 10px;
 
-  margin-top: 15px;
+  margin-top: 16px;
 }
 
 .metric {
   padding: 14px;
 
-  border-radius: 13px;
+  border-radius: 12px;
 
-  background: var(--card);
+  background: white;
 
   box-shadow:
-    0 4px 15px rgba(0,0,0,.07);
+    0 4px 12px rgba(0,0,0,.07);
 
   text-align: center;
 }
@@ -736,105 +1334,192 @@ hr {
   display: block;
 }
 
-.metric span {
-  font-size: 12px;
-
-  color: #5b7180;
-}
-
 .metric strong {
-  font-size: 23px;
-
   margin-top: 5px;
+  font-size: 22px;
 }
 
 .metric.absorption strong {
-  color: #2e7d32;
+  color: #2e9d50;
 }
 
 .metric.balance strong {
-  color: #1976d2;
+  color: #d44;
 }
 
-.metric.balance strong.positive {
-  color: #d35400;
-}
-
-.metric.temperature-up strong {
-  color: #d84315;
+.metric.temperature strong {
+  color: #e57a22;
 }
 
 .metric.oxygen strong {
-  color: #287a9c;
+  color: #2575a7;
 }
 
-.ecosystem-message,
-.explanation {
+
+/* =========================================================
+   MENSAJES
+   ========================================================= */
+
+.ecosystem-message {
   margin-top: 12px;
 
-  padding: 13px 16px;
+  padding: 12px;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  background: var(--card);
+  background: #edf7ef;
 
-  line-height: 1.5;
+  text-align: center;
+
+  font-weight: 700;
 }
 
 .warning-message {
   background: #fff3df;
 }
 
-.explanation strong {
-  margin-right: 8px;
+
+/* =========================================================
+   EXPLICACIÓN
+   ========================================================= */
+
+.explanation {
+  margin-top: 12px;
+
+  padding: 14px;
+
+  border-radius: 12px;
+
+  background: white;
+
+  line-height: 1.5;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.06);
+}
+
+.explanation strong,
+.explanation span {
+  display: block;
+}
+
+.explanation span {
+  margin-top: 5px;
 }
 
 
-/* =====================================================
+/* =========================================================
    RESPONSIVE
-   ===================================================== */
+   ========================================================= */
 
-@media (max-width: 1100px) {
+@media(max-width: 1100px) {
 
   .app {
-    grid-template-columns: 1fr;
+    grid-template-columns: 250px minmax(600px,1fr);
+  }
+
+  .dashboard {
+    grid-template-columns: repeat(3,1fr);
+  }
+
+}
+
+@media(max-width: 900px) {
+
+  .app {
+    display: block;
   }
 
   .control-panel {
-    order: 2;
+    margin-bottom: 18px;
   }
-
-  .simulation {
-    order: 1;
-  }
-
-  .dashboard {
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
-}
-
-
-@media (max-width: 720px) {
 
   .sky {
-    min-height: 760px;
+    min-height: 650px;
+  }
+
+  .wetland {
+    left: 51%;
+    top: 95px;
+  }
+
+  .algae {
+    left: 22%;
+  }
+
+  .coral {
+    left: 32%;
+  }
+
+  .snails {
+    left: 42%;
+  }
+
+  .polar-ice {
+    right: 2%;
+    top: 18px;
+    transform: scale(.85);
+    transform-origin: right bottom;
   }
 
   .dashboard {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2,1fr);
   }
 
-  .ocean-stats {
-    top: 42px;
+}
 
-    left: 10px;
+@media(max-width:600px) {
 
-    right: auto;
+  .topbar {
+    padding: 12px;
   }
 
-  .atmosphere-label {
-    min-width: 190px;
+  .topbar h1 {
+    font-size: 20px;
   }
+
+  .sky {
+    min-height: 600px;
+  }
+
+  .factory {
+    left: 2%;
+  }
+
+  .forest {
+    left: 20%;
+  }
+
+  .energy {
+    left: 48%;
+  }
+
+  .housing {
+    left: 67%;
+  }
+
+  .cattle {
+    right: 1%;
+  }
+
+  .deforestation {
+    left: 31%;
+  }
+
+  .fire {
+    right: 7%;
+  }
+
+  .wetland {
+    left: 47%;
+  }
+
+  .polar-ice {
+    transform: scale(.7);
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
 }
