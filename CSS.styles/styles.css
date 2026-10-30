@@ -251,51 +251,105 @@ hr {
   transition: .3s ease;
 }
 
+/* ELEMENTOS QUE DESAPARECEN */
+
+.scene-item.dead {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .8s ease;
+}
+
 .scene-item:hover {
   transform: scale(1.08);
 }
 
 .scene-item > span:last-child {
   display: block;
+  position: absolute;
+
+  left: calc(50% + var(--label-x, 0px));
+  top: calc(100% + var(--label-y, 0px));
+
+  transform: translateX(-50%);
+
+  width: max-content;
+  max-width: 130px;
+
+  font-size: 13px;
+  font-weight: 700;
+  color: #294656;
+  text-align: center;
+}
+
+/* POSICIÓN PERSONALIZADA DE LOS NOMBRES */
+
+.forest > span:last-child,
+.algae > span:last-child,
+.coral > span:last-child,
+.snails > span:last-child {
+
+  position: absolute;
+
+  left: calc(50% + var(--label-x, 0px));
+  top: calc(100% + var(--label-y, 4px));
+
+  transform: translateX(-50%);
+
+  width: max-content;
+  max-width: 130px;
+
+  text-align: center;
   font-size: 13px;
   font-weight: 700;
   color: #294656;
 }
-
 
 /* =========================================================
    ELEMENTOS TERRESTRES
    ========================================================= */
 
 .factory {
-  left: 5%;
-  top: 265px;
+  left: 3%;
+  top: 190px;
   filter: drop-shadow(0 7px 4px rgba(0,0,0,.18));
+  --label-x: -20px;
+  --label-y: -15px;
 }
 
 .forest {
-  left: 23%;
-  top: 258px;
+  left: 20%;
+  top: 240px;
+  --label-x: -10px;
+  --label-y: -10px;
 }
 
 .cattle {
-  right: 7%;
-  top: 267px;
+  right: 8%;
+  top: 280px;
+  --label-x: -10px;
+  --label-y: 1px;
 }
 
 .housing {
   left: 69%;
-  top: 265px;
+  top: 255px;
+  --label-x: -10px;
+  --label-y: 1px;
 }
 
 .energy {
   left: 50%;
-  top: 255px;
+  top: 240px;
+  --label-x: -10px;
+  --label-y: 25px;
 }
 
 .deforestation {
-  left: 35%;
-  top: 270px;
+  left: 27%;
+  top: 285px;
+  --label-x: -10px;
+  --label-y: 5px;
 }
 
 .cattle::after,
@@ -337,12 +391,12 @@ hr {
 }
 
 .car {
-  top: 10px;
-  left: 37%;
+  top: 2px;
+  left: 35%;
 }
 
 .car2 {
-  top: 48px;
+  top: 40px;
   left: 49%;
 }
 
@@ -494,7 +548,7 @@ hr {
    ========================================================= */
 
 .fire {
-  right: 19%;
+  right: 30%;
   top: 255px;
   width: 100px;
   opacity: 0;
@@ -509,7 +563,7 @@ hr {
    Ahora se utiliza directamente el emoji de fuego. */
 .fire-emoji {
   display: block;
-  font-size: 58px;
+  font-size: 50px;
   line-height: 1;
   margin: 0 auto 2px;
 }
@@ -622,27 +676,26 @@ hr {
    MÁS ARRIBA Y ANIMADO
    ========================================================= */
 
+
+/* HUMEDAL
+   MODIFICACIÓN: el humedal ya no disminuye de tamaño
+   ni pierde opacidad cuando aumenta el CO2. */
+
 .wetland {
-  left: 54%;
-  top: 105px;
+  left: 45%;
+  top: 35px;
   width: 150px;
   height: 82px;
   font-size: 12px;
   z-index: 8;
 
-  --melt: 0;
+  /* Se elimina el efecto de reducción por --melt */
+  transform: none;
+  opacity: 1;
 
-  transform:
-    scale(calc(1 - var(--melt) * .38));
-
-  transform-origin: center bottom;
-
-  opacity:
-    calc(1 - var(--melt) * .55);
-
-  transition:
-    transform .7s ease,
-    opacity .7s ease;
+  /* Se mantienen las transiciones por si se necesitan
+     para otros efectos visuales */
+  transition: none;
 }
 
 .wetland-art {
@@ -985,25 +1038,34 @@ hr {
    ========================================================= */
 
 .algae {
-  left: 25%;
+  left: 30%;
   bottom: 42px;
   font-size: 34px;
   z-index: 8;
+
+  --label-x: -10px;
+  --label-y: 5px;
 }
 
 .coral {
-  left: 34%;
+  left: 35%;
   bottom: 40px;
   font-size: 34px;
   z-index: 8;
+
+  --label-x: 15px;
+  --label-y: -15px;
 }
 
 .snails {
-  left: 43%;
+  left: 42%;
   right: auto;
   bottom: 40px;
   font-size: 32px;
   z-index: 8;
+
+  --label-x: 20px;
+  --label-y: 5px;
 }
 
 
@@ -1012,13 +1074,13 @@ hr {
    ========================================================= */
 
 .dead-whale-beach {
-  left: 8%;
-  top: 18px;
+  left: 2%;
+  top: 30px;
   font-size: 38px;
 }
 
 .dead-whale-sea {
-  left: 13%;
+  left: 8%;
   bottom: 48px;
   font-size: 38px;
 }
@@ -1180,8 +1242,8 @@ hr {
   left: 0;
   top: 0;
 
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 
   opacity: 0;
@@ -1191,7 +1253,7 @@ hr {
   will-change: transform, opacity;
 
   animation:
-    co2ParticleFly 1.35s ease-in-out forwards;
+    co2ParticleFly 2.35s ease-in-out forwards;
   animation-delay: var(--delay);
 }
 
@@ -1483,7 +1545,7 @@ hr {
   }
 
   .factory {
-    left: 2%;
+    left: 3%;
   }
 
   .forest {
@@ -1522,4 +1584,51 @@ hr {
     grid-template-columns: 1fr;
   }
 
+}
+
+
+/* =====================================================
+   MODIFICACIÓN: IMÁGENES PROPIAS DEL GLACIAR Y HUMEDAL
+   ===================================================== */
+
+/* Imagen dentro de los botones del paisaje */
+.custom-landscape-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  margin: 0 auto;
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.15));
+}
+
+/* Texto debajo de cada imagen */
+.image-caption {
+  display: block;
+  margin-top: 2px;
+  color: #294656;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Tamaño y ubicación del glaciar */
+.polar-ice {
+  width: 185px;
+  height: 115px;
+  padding: 0;
+}
+
+/* Tamaño y ubicación del humedal */
+.wetland {
+  width: 150px;
+  height: 100px;
+  padding: 0;
+}
+
+/* Evita que el texto del botón quede oculto */
+.polar-ice .image-caption,
+.wetland .image-caption {
+  position: relative;
+  z-index: 2;
 }

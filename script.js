@@ -739,6 +739,12 @@ function setElementEffects(
   forest.style.transform =
     `scale(${1 - forestLoss * .15})`;
 
+// Cuando el CO2 llega a 1700 unidades,
+// el bosque desaparece completamente.
+  forest.classList.toggle(
+    "dead",
+    atmosphericCO2 >= 1700
+  );
 
   /* =====================================================
      MODIFICACIÓN:
@@ -817,6 +823,12 @@ function setElementEffects(
     String(
       1 - algaeLoss * .7
     );
+// Cuando el deterioro llega al máximo,
+// las algas desaparecen.
+  algae.classList.toggle(
+   "dead",
+    algaeLoss >= 1
+  );
 
 
   /* =====================================================
@@ -836,9 +848,18 @@ function setElementEffects(
     String(
       1 - coralLoss * .7
     );
-
+// Los corales desaparecen cuando
+// el deterioro llega al máximo.
+  coral.classList.toggle(
+    "dead",
+    coralLoss >= 1
+  );
 
   /* =====================================================
+     CARACOLES
+     ===================================================== */
+
+    /* =====================================================
      CARACOLES
      ===================================================== */
 
@@ -851,15 +872,16 @@ function setElementEffects(
       )
     );
 
-  /* MODIFICACIÓN:
-     Los caracoles se vuelven semitransparentes,
-     igual que corales, árboles, algas y humedales,
-     pero no desaparecen completamente. */
-  snails.style.opacity =
-    String(
-      1 - snailLoss * .7
-    );
+  // Desaparecen cuando el pH llega a 7.6
+  const snailsDead = pH <= 7.6;
 
+  if (snailsDead) {
+    snails.style.display = "none";
+  } else {
+    snails.style.display = "";
+    snails.style.opacity =
+      String(1 - snailLoss * .7);
+  }
 
   /* =====================================================
      GLACIAR

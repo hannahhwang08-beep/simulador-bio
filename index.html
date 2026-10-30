@@ -172,7 +172,7 @@
       <!-- FÁBRICA -->
 
       <button class="scene-item factory" data-info="factory">
-        🏭
+        <img src="./Imagenes/Fabrica.png" width="150">
         <span>Fábricas</span>
       </button>
 
@@ -182,8 +182,8 @@
       <div class="road">
         <div class="road-line"></div>
 
-        <button class="scene-item car" data-info="car">🚗</button>
-        <button class="scene-item car car2" data-info="car">🚙</button>
+        <button class="scene-item car" data-info="car"><img src="./Imagenes/Auto1.png" width="95"></button>
+        <button class="scene-item car car2" data-info="car"><img src="./Imagenes/Auto2.png" width="95"></button>
       </div>
 
 
@@ -192,20 +192,16 @@
       <button class="scene-item forest" data-info="tree">
 
         <div class="trees">
-          <span>🌳</span>
-          <span>🌳</span>
-          <span>🌳</span>
+          <img src="./Imagenes/Bosque.png" width="140">
         </div>
-
         <span>Bosque</span>
-
       </button>
 
 
       <!-- VIVIENDAS -->
 
       <button class="scene-item housing" data-info="housing">
-        🏠
+        <img src="./Imagenes/Vivienda.png" width="120">
         <span>Viviendas</span>
       </button>
 
@@ -215,11 +211,7 @@
       <button class="scene-item energy" data-info="energy">
 
         <span class="power-plant" aria-hidden="true">
-          <span class="plant-building"></span>
-          <span class="plant-chimney chimney-a"></span>
-          <span class="plant-chimney chimney-b"></span>
-          <span class="plant-smoke smoke-a">●</span>
-          <span class="plant-smoke smoke-b">●</span>
+          <img src="./Imagenes/Energía.png" width="150">
         </span>
 
         <span>Energía fósil</span>
@@ -240,9 +232,7 @@
       >
 
         <span class="deforestation-logs" aria-hidden="true">
-          <span>🪵</span>
-          <span>🪵</span>
-          <span>🪵</span>
+          <img src="./Imagenes/Deforestacion.png" width="140">
         </span>
 
         <span>Deforestación</span>
@@ -251,12 +241,11 @@
 
 
       <!-- INCENDIOS AUTOMÁTICOS -->
-      <!-- MODIFICACIÓN:
-           Se reemplaza la fogata dibujada por el emoji 🔥 -->
+      <!-- MODIFICACIÓN:-->
 
       <button class="scene-item fire" data-info="fire">
 
-        <span class="fire-emoji" aria-hidden="true">🔥</span>
+        <span class="fire-emoji" aria-hidden="true"><img src="./Imagenes/Incendios.png" width="120"></span>
 
         <span>Incendios</span>
 
@@ -266,8 +255,7 @@
       <!-- GANADO -->
 
       <button class="scene-item cattle" data-info="cattle">
-        <span>🐄</span>
-        <span>🐄</span>
+        <img src="./Imagenes/Ganado.png" width="65">
         <span>Ganado</span>
       </button>
 
@@ -295,7 +283,7 @@
           class="scene-item dead-whale-beach"
           data-info="whaleBeach"
         >
-          <span class="decomposition-whale">🐋</span>
+          <span class="decomposition-whale"><img src="./Imagenes/Materia playa.png" width="100"></span>
           <span>Materia en descomposición</span>
         </button>
 
@@ -308,27 +296,22 @@
              HUMEDAL MÁS ARRIBA PARA NO TAPAR LOS CORALES
              ================================================= -->
 
+        
+<!-- MODIFICACIÓN: imagen propia del humedal -->
         <button
           class="scene-item wetland"
+          id="wetlandImage"
           data-info="wetland"
+          aria-label="Humedales y turberas"
         >
-
-          <span class="wetland-art">
-
-            <span class="wetland-water"></span>
-
-            <span class="reed reed-a"></span>
-            <span class="reed reed-b"></span>
-            <span class="reed reed-c"></span>
-
-            <span class="marsh-plant plant-a">🌿</span>
-            <span class="marsh-plant plant-b">🌾</span>
-
-          </span>
-
-          <span>Humedales / turberas</span>
-
+          <img
+            src="./Imagenes/Humedal.png"
+            alt="Humedal"
+            class="custom-landscape-image"
+          >
+          <span class="image-caption">Humedales / turberas</span>
         </button>
+
 
 
         <!-- =================================================
@@ -338,34 +321,22 @@
 
         <!-- MODIFICACIÓN:
              El glaciar ahora es clickeable como el resto de los elementos. -->
+        
+<!-- MODIFICACIÓN: imagen propia del glaciar -->
         <button
           class="scene-item polar-ice"
           id="polarIce"
           data-info="glacier"
           aria-label="Glaciar"
         >
-
-          <div class="glacier-art">
-
-            <div class="glacier-mountain mountain-back"></div>
-
-            <div class="glacier-mountain mountain-main">
-
-              <span class="glacier-snow"></span>
-              <span class="glacier-crack crack-a"></span>
-              <span class="glacier-crack crack-b"></span>
-
-            </div>
-
-            <div class="glacier-water"></div>
-
-          </div>
-
-          <div class="glacier-caption">
-            <strong>Glaciar</strong>
-          </div>
-
+          <img
+            src="./Imagenes/Glaciar.png"
+            alt="Glaciar"
+            class="custom-landscape-image"
+          >
+          <span class="image-caption">Glaciar</span>
         </button>
+
 
 
         <!-- =================================================
@@ -374,18 +345,13 @@
 
         <div class="ocean">
 
-          <div class="ocean-label">
-            🌊 OCÉANO
-          </div>
-
-
           <!-- MATERIA EN DESCOMPOSICIÓN -->
 
           <button
             class="scene-item dead-whale-sea"
             data-info="whaleSea"
           >
-            <span class="decomposition-whale">🐋</span>
+            <span class="decomposition-whale"><img src="./Imagenes/Materia mar.png" width="100"></span>
             <span>Materia en descomposición</span>
           </button>
 
@@ -397,9 +363,7 @@
 
           <button class="scene-item algae" data-info="algae">
 
-            <span>🌿</span>
-            <span>🌿</span>
-            <span>🌿</span>
+            <img src="./Imagenes/Algas.png" width="60">
 
             <span>Algas</span>
 
@@ -408,8 +372,7 @@
 
           <button class="scene-item coral" data-info="coral">
 
-            <span>🪸</span>
-            <span>🪸</span>
+            <img src="./Imagenes/Corales.png" width="80">
 
             <span>Corales</span>
 
@@ -418,8 +381,7 @@
 
           <button class="scene-item snails" data-info="snail">
 
-            <span>🐚</span>
-            <span>🐚</span>
+            <img src="./Imagenes/Caracoles.png" width="80">
 
             <span>Caracoles</span>
 
