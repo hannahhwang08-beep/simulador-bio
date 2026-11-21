@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ciclo del Carbono | Modo desafíos</title>
+  <link rel="stylesheet" href="./CSS.styles/desafio.css">
+  <script src="./java/desafio.js" defer></script>
+  <script src="./java/ajustar-paisaje.js" defer></script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-icon">🌎</span>
+    <div>
+      <h1>Ciclo del carbono</h1>
+      <p>Modo desafíos · 5 niveles</p>
+    </div>
+  </div>
+
+  
+  <nav class="navigation">
+    <a href="index.html">Página inicial</a>
+    <a href="simulacion.html">Ir al simulador</a>
+
+    <button id="openRules" class="nav-rules-btn">
+      Ver reglas
+    </button>
+</nav>
+
+</header>
+
+<main class="page-wrap">
+
+  <!-- PANTALLA INICIAL -->
+  <section id="introScreen" class="intro-card">
+    <div class="eyebrow">MODO DESAFÍO</div>
+
+    <h2>¡Poné a prueba tus conocimientos!</h2>
+
+    <p>
+      Resolvé cinco situaciones ambientales modificando
+      los elementos del ciclo del carbono.
+      Tu objetivo es reducir el CO₂ sin aumentar
+      la temperatura.
+    </p>
+
+    <div class="rules-grid">
+      <article>
+        <strong>10%</strong>
+        <span>
+          Máximo de modificación del rango de cada
+          parámetro, salvo excepciones indicadas
+          en un desafío.
+        </span>
+      </article>
+
+      <article>
+        <strong>+600</strong>
+        <span>
+          No podés superar en 600 unidades
+          el CO₂ inicial del desafío.
+        </span>
+      </article>
+
+      <article>
+        <strong>🌡️</strong>
+        <span>
+          La temperatura final no puede ser
+          mayor que la inicial.
+        </span>
+      </article>
+
+      <article>
+        <strong>✓</strong>
+        <span>
+          Para ganar, el CO₂ debe bajar y
+          todas las reglas deben cumplirse.
+        </span>
+      </article>
+    </div>
+
+    <p class="challenges-warning">
+      ¡Cada decisión cuenta! Pensá bien antes
+      de modificar las variables.
+    </p>
+
+    <button id="beginGame" class="btn btn-primary">
+      Comenzar desafíos →
+    </button>
+  </section>
+
+  <!-- PANTALLA DE JUEGO -->
+  <section id="gameScreen" class="hidden">
+
+    <section class="challenge-heading panel">
+
+      <div class="heading-top">
+        <span id="challengeNumber" class="eyebrow">
+          DESAFÍO 1 DE 5
+        </span>
+
+        <span id="difficulty" class="difficulty">
+          Fácil
+        </span>
+      </div>
+
+      <h2 id="challengeTitle">
+        Una ciudad en expansión
+      </h2>
+
+      <p id="challengeSituation"></p>
+
+      <div id="specialRule"
+           class="special-rule hidden"></div>
+
+      <div class="progress-track">
+        <div id="progressBar"
+             class="progress-fill"></div>
+      </div>
+
+    </section>
+
+    <div class="game-layout">
+
+      <!-- VARIABLES -->
+      <section class="panel controls-panel">
+
+        <div class="section-title">
+          <div>
+            <span class="eyebrow">TUS DECISIONES</span>
+            <h3>Modificá las variables</h3>
+          </div>
+
+          <button id="resetChallenge"
+                  class="btn btn-light btn-small">
+            ↺ Reiniciar
+          </button>
+        </div>
+
+        <p class="muted">
+          Mové las barras para modificar el ambiente.
+          Los límites indican los valores permitidos.
+        </p>
+
+        <!-- BOTÓN ARRIBA -->
+        <button id="checkChallenge"
+                class="btn btn-primary check-top">
+          Comprobar desafío
+        </button>
+
+        <!-- ADVERTENCIAS -->
+        <div id="ruleAlert"
+             class="rule-alert hidden"
+             role="alert"
+             aria-live="assertive">
+        </div>
+
+        <!-- CONTROLES GENERADOS POR JAVASCRIPT -->
+        <div id="controls" class="controls-list"></div>
+
+      </section>
+
+      <!-- PAISAJE -->
+      <section class="right-column">
+
+        <section class="panel environment-panel">
+
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">
+                ESTADO DEL AMBIENTE
+              </span>
+              <h3>Equilibrio del ecosistema</h3>
+            </div>
+
+            <span class="live-dot">En vivo</span>
+          </div>
+
+          <div class="scene-viewport">
+            <div class="sky challenge-scene"
+              id="challengeScene">
+
+            <div class="cloud cloud1">☁️</div>
+            <div class="cloud cloud2">☁️</div>
+
+            <!-- ATMÓSFERA -->
+            <div class="atmosphere-label">
+              <span>ATMÓSFERA</span>
+
+              <strong id="sceneAtmosphereCO2">
+                2000
+              </strong>
+
+              <small>unidades de CO₂</small>
+
+              <div id="sceneCO2Status"
+                   class="co2-status">
+                Nivel inicial
+              </div>
+            </div>
+
+            <!-- FÁBRICA -->
+            <button class="scene-item factory"
+                    data-info="factory">
+              <img src="./Imagenes/Fabrica.png"
+                   alt="Fábrica" width="150">
+              <span>Fábricas</span>
+            </button>
+
+            <!-- CARRETERA Y AUTOS -->
+            <div class="road">
+              <div class="road-line"></div>
+
+              <button class="scene-item car"
+                      data-info="car">
+                <img src="./Imagenes/Auto1.png"
+                     alt="Auto" width="95">
+              </button>
+
+              <button class="scene-item car car2"
+                      data-info="car">
+                <img src="./Imagenes/Auto2.png"
+                     alt="Auto" width="95">
+              </button>
+            </div>
+
+            <!-- BOSQUE -->
+            <button class="scene-item forest"
+                    data-info="tree">
+              <div class="trees">
+                <img src="./Imagenes/Bosque.png"
+                     alt="Bosque" width="140">
+              </div>
+              <span>Bosque</span>
+            </button>
+
+            <!-- VIVIENDAS -->
+            <button class="scene-item housing"
+                    data-info="housing">
+              <img src="./Imagenes/Vivienda.png"
+                   alt="Viviendas" width="120">
+              <span>Viviendas</span>
+            </button>
+
+            <!-- ENERGÍA -->
+            <button class="scene-item energy"
+                    data-info="energy">
+              <span class="power-plant">
+                <img src="./Imagenes/Energía.png"
+                     alt="Energía fósil" width="150">
+              </span>
+              <span>Energía fósil</span>
+            </button>
+
+            <!-- DEFORESTACIÓN -->
+            <button class="scene-item deforestation"
+                    data-info="deforestation">
+              <span class="deforestation-logs">
+                <img src="./Imagenes/Deforestacion.png"
+                     alt="Deforestación" width="140">
+              </span>
+              <span>Deforestación</span>
+            </button>
+
+            <!-- INCENDIOS -->
+            <button class="scene-item fire"
+                    data-info="fire">
+              <span class="fire-emoji">
+                <img src="./Imagenes/Incendios.png"
+                     alt="Incendios" width="120">
+              </span>
+            </button>
+
+            <!-- GANADO -->
+            <button class="scene-item cattle"
+                    data-info="cattle">
+              <img src="./Imagenes/Ganado.png"
+                   alt="Ganado" width="65">
+              <span>Ganado</span>
+            </button>
+
+            <!-- PLAYA -->
+            <div class="beach">
+
+              <div class="sand"></div>
+
+              <button class="scene-item dead-whale-beach"
+                      data-info="whaleBeach">
+                <span class="decomposition-whale">
+                  <img src="./Imagenes/Materia playa.png"
+                       alt="Materia en descomposición"
+                       width="100">
+                </span>
+                <span>Materia en descomposición</span>
+              </button>
+
+              <!-- HUMEDAL -->
+              <button class="scene-item wetland"
+                      id="challengeWetland"
+                      data-info="wetland">
+                <img src="./Imagenes/Humedal.png"
+                     alt="Humedal"
+                     class="custom-landscape-image">
+                <span class="image-caption">
+                  Humedales / turberas
+                </span>
+              </button>
+
+              <!-- GLACIAR -->
+              <button class="scene-item polar-ice"
+                      id="challengePolarIce"
+                      data-info="glacier">
+                <img src="./Imagenes/Glaciar.png"
+                     alt="Glaciar"
+                     class="custom-landscape-image">
+                <span class="image-caption">
+                  Glaciar
+                </span>
+              </button>
+
+              <!-- OCÉANO -->
+              <div class="ocean">
+
+                <button class="scene-item dead-whale-sea"
+                        data-info="whaleSea">
+                  <span class="decomposition-whale">
+                    <img src="./Imagenes/Materia mar.png"
+                         alt="Materia en el mar"
+                         width="100">
+                  </span>
+                  <span>Materia en descomposición</span>
+                </button>
+
+                <button class="scene-item algae"
+                        data-info="algae">
+                  <img src="./Imagenes/Algas.png"
+                       alt="Algas" width="60">
+                  <span>Algas</span>
+                </button>
+
+                <button class="scene-item coral"
+                        data-info="coral">
+                  <img src="./Imagenes/Corales.png"
+                       alt="Corales" width="80">
+                  <span>Corales</span>
+                </button>
+
+                <button class="scene-item snails"
+                        data-info="snail">
+                  <img src="./Imagenes/Caracoles.png"
+                       alt="Caracoles" width="80">
+                  <span>Caracoles</span>
+                </button>
+
+                <!-- NIVEL DEL MAR -->
+                <div class="sea-level">
+                  <span>Nivel del mar</span>
+                  <strong id="challengeSeaLevel">
+                    0,0 cm
+                  </strong>
+                  <small>modelo didáctico</small>
+                </div>
+
+                <!-- VARIABLES DEL OCÉANO -->
+                <div class="ocean-stats">
+
+                  <div>
+                    <span>CO₂ disuelto</span>
+                    <strong id="challengeDissolvedCO2">
+                      0
+                    </strong>
+                  </div>
+
+                  <div id="challengeOceanPHCard">
+                    <span>pH</span>
+                    <strong id="challengeOceanPH">
+                      8.2
+                    </strong>
+                  </div>
+
+                  <div>
+                    <span>O₂</span>
+                    <strong id="challengeOceanOxygen">
+                      21%
+                    </strong>
+                  </div>
+
+                </div>
+
+                            </div>
+            </div>
+          </div> <!-- Fin de challengeScene -->
+        </div> <!-- Fin de scene-viewport -->
+
+        <!-- INDICADORES -->
+          <div class="metrics-grid">
+
+            <article class="metric metric-co2">
+              <span>CO₂ atmosférico</span>
+              <strong id="co2Value">2000</strong>
+              <small>unidades</small>
+            </article>
+
+            <article class="metric">
+              <span>Temperatura</span>
+              <strong id="temperatureValue">
+                +0,50 °C
+              </strong>
+              <small>variación del modelo</small>
+            </article>
+
+            <article class="metric">
+              <span>CO₂ emitido</span>
+              <strong id="emittedValue">0</strong>
+              <small>unidades</small>
+            </article>
+
+            <article class="metric">
+              <span>CO₂ absorbido</span>
+              <strong id="absorbedValue">0</strong>
+              <small>unidades</small>
+            </article>
+
+          </div>
+
+          <div id="statusMessage"
+               class="status-message"
+               aria-live="polite">
+            Ajustá las variables para mejorar el equilibrio.
+          </div>
+
+        </section>
+      </section>
+    </div>
+  </section>
+
+  <!-- RESULTADO -->
+  <section id="resultScreen"
+           class="result-card hidden"
+           aria-live="polite">
+
+    <div id="resultIcon" class="result-icon">✓</div>
+
+    <div class="eyebrow">
+      RESULTADO DEL DESAFÍO
+    </div>
+
+    <h2 id="resultTitle">
+      ¡Desafío superado!
+    </h2>
+
+    <p id="resultText"></p>
+
+    <div class="result-stats">
+      <span>
+        CO₂ final
+        <strong id="resultCO2">0</strong>
+      </span>
+
+      <span>
+        Temperatura final
+        <strong id="resultTemperature">0</strong>
+      </span>
+    </div>
+
+    <!-- SOLUCIONES SOLO DESPUÉS DE PERDER -->
+    <section id="failureSolutions"
+             class="failure-solutions hidden">
+
+      <h3>Probá las cuatro soluciones</h3>
+
+      <p>
+        Elegí una alternativa para conocer
+        sus modificaciones y observar cómo cambia
+        el paisaje.
+      </p>
+
+      <div id="solutionChoices"
+           class="solution-choices"></div>
+
+      <div id="solutionDetail"
+           class="solution-detail"
+           aria-live="polite">
+        Seleccioná una solución.
+      </div>
+
+      <div id="previewSceneHost"
+           class="preview-scene-host"></div>
+
+    </section>
+
+    <div class="result-actions">
+      <button id="retryButton" class="btn btn-light">
+        Reintentar
+      </button>
+
+      <button id="continueButton"
+              class="btn btn-primary">
+        Siguiente desafío →
+      </button>
+    </div>
+
+  </section>
+
+  <!-- FINAL -->
+  <section id="finalScreen"
+           class="result-card hidden">
+
+    <div class="result-icon">🏆</div>
+
+    <div class="eyebrow">MISIÓN CUMPLIDA</div>
+
+    <h2>¡Completaste los cinco desafíos!</h2>
+
+    <p>
+      Demostraste cómo las decisiones sobre
+      la industria, el transporte y los
+      ecosistemas pueden modificar el equilibrio
+      del ciclo del carbono.
+    </p>
+
+    <div class="result-actions">
+      <button id="playAgain" class="btn btn-primary">
+        Volver a jugar
+      </button>
+
+      <a href="index.html" class="btn btn-light">
+        Página inicial
+      </a>
+
+      <a href="simulacion.html" class="btn btn-light">
+        Simulador
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- VENTANA DE REGLAS -->
+<div id="rulesModal" class="rules-modal hidden">
+
+  <div class="rules-modal-content"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="rulesModalTitle">
+
+    <h2 id="rulesModalTitle">Reglas de los desafíos</h2>
+
+     <p>
+      Resolvé cinco situaciones ambientales modificando
+      los elementos del ciclo del carbono.
+      Tu objetivo es reducir el CO₂ sin aumentar
+      la temperatura.
+    </p>
+
+    <div class="rules-grid">
+      <article>
+        <strong>10%</strong>
+        <span>
+          Máximo de modificación del rango de cada
+          parámetro, salvo excepciones indicadas
+          en un desafío.
+        </span>
+      </article>
+
+      <article>
+        <strong>+600</strong>
+        <span>
+          No podés superar en 600 unidades
+          el CO₂ inicial del desafío.
+        </span>
+      </article>
+
+      <article>
+        <strong>🌡️</strong>
+        <span>
+          La temperatura final no puede ser
+          mayor que la inicial.
+        </span>
+      </article>
+
+      <article>
+        <strong>✓</strong>
+        <span>
+          Para ganar, el CO₂ debe bajar y
+          todas las reglas deben cumplirse.
+        </span>
+      </article>
+    </div>
+
+    <p class="challenges-warning">
+      ¡Cada decisión cuenta! Pensá bien antes
+      de modificar las variables.
+    </p>
+
+    <button id="closeRules" class="btn btn-primary">
+      Cerrar y continuar
+    </button>
+
+  </div>
+</div>
+
+</body>
+</html>

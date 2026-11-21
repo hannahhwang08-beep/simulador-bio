@@ -36,7 +36,7 @@ const carbonData = {
     explanation:
       "Cada fábrica representa 100 unidades de CO₂ emitidas."
   },
-
+  
   car: {
     name: "Auto",
     icon: "🚗",
@@ -188,7 +188,7 @@ const carbonData = {
   fire: {
     name: "Incendios",
     icon: "🔥",
-    emitted: 0,
+    emitted: 1,
     absorbed: 0,
     description:
       "Los incendios aparecen automáticamente cuando aumenta suficientemente la temperatura.",
@@ -618,6 +618,121 @@ function updateLabels() {
 
 
 /* =========================================================
+   NUEVA MODIFICACIÓN:
+   MUERTE REAL DE LOS ELEMENTOS POR CONTAMINACIÓN
+
+   Si el ambiente supera los límites:
+   - Los árboles desaparecen y pasan a 0.
+   - Los humedales desaparecen y pasan a 0.
+   - Las algas desaparecen y pasan a 0.
+   - También se actualizan sus controles.
+   ========================================================= */
+
+function applyEnvironmentalDeaths() {
+
+  let huboCambios = true;
+  let intentos = 0;
+
+  while (huboCambios && intentos < 5) {
+
+    huboCambios = false;
+    intentos++;
+
+    const co2 = calculateAtmosphericCO2();
+    const ocean = calculateOcean(co2);
+
+    // ÁRBOLES: mueren con CO2 igual o superior a 1700.
+    if (co2 >= 1700 && counts.tree > 0) {
+      counts.tree = 0;
+      inputs.tree.value = 0;
+      huboCambios = true;
+    }
+
+    // HUMEDALES: mueren con CO2 igual o superior a 1700.
+    if (co2 >= 1700 && counts.wetland > 0) {
+      counts.wetland = 0;
+      inputs.wetland.value = 0;
+      huboCambios = true;
+    }
+
+    // ALGAS: mueren cuando el pH llega a 7.45 o menos.
+    if (ocean.pH <= 7.45 && counts.algae > 0) {
+      counts.algae = 0;
+      inputs.algae.value = 0;
+      huboCambios = true;
+    }
+
+
+/* GANADO:
+   Muere cuando el CO₂ llega a 1700 unidades.
+
+   Se actualiza tanto la cantidad interna
+   como la barra de control.
+*/
+
+    if (co2 >= 1700 && counts.cattle > 0) {
+      counts.cattle = 0;
+      inputs.cattle.value = 0;
+      huboCambios = true;
+
+    }
+
+
+  }
+
+}
+
+/* =========================================================
+   NUEVA MODIFICACIÓN:
+   DESAPARICIÓN DE ELEMENTOS CUANDO LLEGAN A 0
+   ========================================================= */
+
+function updateSceneVisibility(atmosphericCO2) {
+
+  // Elementos que dependen de una variable del panel.
+  const sceneElements = [
+    "factory",
+    "car",
+    "tree",
+    "housing",
+    "energy",
+    "deforestation",
+    "wetland",
+    "cattle",
+    "algae",
+    "whaleBeach",
+    "whaleSea"
+  ];
+
+  sceneElements.forEach(name => {
+
+    const elements = document.querySelectorAll(
+      `[data-info="${name}"]`
+    );
+
+    // Si la cantidad es 0, desaparece.
+    // Si es mayor a 0, vuelve a aparecer.
+    const shouldDisappear = counts[name] <= 0;
+
+    
+    elements.forEach(element => {
+
+      element.classList.toggle(
+        "dead",
+        shouldDisappear
+      );
+
+    });
+
+  });
+
+}
+
+
+
+
+
+/* =========================================================
    ATMÓSFERA
    ========================================================= */
 
@@ -675,6 +790,43 @@ function setElementEffects(
   atmosphericCO2,
   pH
 ) {
+    /* =====================================================
+     GANADO
+     Desaparece progresivamente cuando aumenta el CO₂.
+     ===================================================== */
+
+  const cattle = document.querySelector(".cattle");
+
+  // Comienza a disminuir cuando el CO₂ supera 700.
+  // Desaparece completamente al llegar a 1500.
+  const cattleLoss = Math.max(
+    0,
+    Math.min(
+      1,
+      (atmosphericCO2 - 700) / 800
+    )
+  );
+
+  if (cattle) {
+    cattle.style.opacity = String(1 - cattleLoss);
+
+    cattle.style.transition = "opacity 1s ease";
+
+    cattle.classList.toggle(
+      "dead",
+      cattleLoss >= 1
+    );
+  }
+
+  // Cuando desaparece, el indicador de ganado pasa a 0.
+  if (cattleLoss >= 1 && counts.cattle > 0) {
+    counts.cattle = 0;
+
+    updateLabels();
+  }
+
+  
+  
 
   const forest =
     document.querySelector(".forest");
@@ -1054,6 +1206,9 @@ document
    ========================================================= */
 
 function updateSimulation() {
+    // MODIFICACIÓN:
+  // Primero comprobar si algún elemento murió por contaminación.
+  applyEnvironmentalDeaths();
 
   const emitted =
     calculateEmissions();
@@ -1131,11 +1286,17 @@ function updateSimulation() {
       .replace(".", ",")} cm`;
 
 
+  
   updateLabels();
+
+  // NUEVA MODIFICACIÓN:
+  // Actualizar la visibilidad de los elementos.
+  updateSceneVisibility(atmospheric);
 
   updateAtmosphereVisual(
     atmospheric
   );
+
 
   setElementEffects(
     atmospheric,
@@ -1245,7 +1406,76 @@ function updateSimulation() {
 
 
 /* =========================================================
+   NUEVA MODIFICACIÓN:
+   LÍMITES DE RECUPERACIÓN SEGÚN LA CONTAMINACIÓN
+   ========================================================= */
+
+// Mensaje de advertencia dentro del panel.
+const recoveryWarning = document.createElement("div");
+
+recoveryWarning.className = "recovery-warning";
+recoveryWarning.textContent = "";
+
+const controlPanel = document.querySelector(".control-panel");
+
+controlPanel.insertBefore(
+  recoveryWarning,
+  controlPanel.querySelector(".control-group")
+);
+
+
+// Calcula cuánto puede recuperarse cada elemento.
+function getRecoveryLimit(name, co2) {
+
+  const maximum = Number(inputs[name].max);
+
+  let percentage = 1;
+
+  if (co2 >= 1700) {
+    percentage = 0;
+  } else if (co2 >= 1400) {
+    percentage = 0.10;
+  } else if (co2 >= 1100) {
+    percentage = 0.25;
+  } else if (co2 >= 800) {
+    percentage = 0.50;
+  }
+
+  return Math.floor(maximum * percentage);
+}
+
+
+// Muestra el aviso cuando se intenta superar el límite.
+function showRecoveryWarning(maximum) {
+
+  recoveryWarning.textContent =
+    "⚠️ El planeta está muy contaminado. " +
+    "Reduce los contaminantes para aumentar este parámetro. " +
+    "Máximo permitido actualmente: " + maximum + ".";
+
+  recoveryWarning.classList.add("visible");
+
+}
+
+
+// Oculta el aviso.
+function hideRecoveryWarning() {
+
+  recoveryWarning.textContent = "";
+
+  recoveryWarning.classList.remove("visible");
+
+}
+
+/* =========================================================
    CONTROLES
+   ========================================================= */
+
+
+/* =========================================================
+   CONTROLES
+   MODIFICACIÓN:
+   LIMITAR LA RECUPERACIÓN DE ELEMENTOS NATURALES
    ========================================================= */
 
 inputNames.forEach(name => {
@@ -1254,10 +1484,48 @@ inputNames.forEach(name => {
     "input",
     event => {
 
-      counts[name] =
-        Number(
-          event.target.value
-        );
+      let newValue = Number(event.target.value);
+
+      
+      const naturalElements = [
+        "tree",
+        "algae",
+        "wetland",
+        "cattle"
+      ];
+
+
+      hideRecoveryWarning();
+
+      // Solo restringir árboles, algas y humedales.
+      if (naturalElements.includes(name)) {
+
+        const currentCO2 = calculateAtmosphericCO2();
+
+        const maximumAllowed =
+          getRecoveryLimit(name, currentCO2);
+
+        // Si se intenta aumentar por encima del límite,
+        // se mantiene el máximo permitido.
+        if (
+          newValue > counts[name] &&
+          newValue > maximumAllowed
+        ) {
+
+          newValue = Math.max(
+            counts[name],
+            maximumAllowed
+          );
+
+          event.target.value = newValue;
+
+          showRecoveryWarning(maximumAllowed);
+
+        }
+
+      }
+
+      counts[name] = newValue;
 
       updateSimulation();
 
@@ -1265,6 +1533,7 @@ inputNames.forEach(name => {
   );
 
 });
+
 
 
 /* =========================================================
@@ -1277,25 +1546,141 @@ inputNames.forEach(name => {
 const co2ParticleLayer =
   document.getElementById("co2ParticleLayer");
 
+
+/* ==========================================
+   COORDENADAS CORREGIDAS
+   PARA PAISAJE ESCALADO
+   ========================================== */
+
 function getElementCenter(element, skyRect) {
 
-  const rect =
-    element.getBoundingClientRect();
+  const sky = document.querySelector(".sky");
+
+  if (!sky || !element) {
+    return { x: 0, y: 0 };
+  }
+
+  // Usar la imagen real para localizar
+  // el punto de origen o destino.
+  const image = element.querySelector("img");
+
+  const target = image || element;
+
+  const rect = target.getBoundingClientRect();
+
+  // Escala real aplicada al paisaje.
+  const scaleX =
+    skyRect.width / sky.offsetWidth;
+
+  const scaleY =
+    skyRect.height / sky.offsetHeight;
 
   return {
-    x:
+
+    x: (
       rect.left -
       skyRect.left +
-      rect.width / 2,
+      rect.width / 2
+    ) / scaleX,
 
-    y:
+    y: (
       rect.top -
       skyRect.top +
       rect.height / 2
+    ) / scaleY
+
   };
 
 }
 
+
+
+/* =========================================================
+   NUEVA MODIFICACIÓN:
+   LOS INCENDIOS EMITEN PELotITAS ROJAS AUTOMÁTICAMENTE
+   ========================================================= */
+
+function createFireCO2Particle() {
+
+  if (!co2ParticleLayer) return;
+
+  const fire = document.querySelector(".fire");
+
+  const sky = document.querySelector(".sky");
+
+  const atmosphere = document.querySelector(
+    ".atmosphere-label"
+  );
+
+  // Solo emitir cuando los incendios estén activos.
+  if (!fire || !fire.classList.contains("fire-active")) {
+    return;
+  }
+
+  if (!sky || !atmosphere) return;
+
+  const skyRect = sky.getBoundingClientRect();
+
+  const firePoint = getElementCenter(
+    fire,
+    skyRect
+  );
+
+  
+/* Centro de la atmósfera corregido
+   según el escalado del paisaje */
+
+const atmospherePoint =
+  getElementCenter(
+    atmosphere,
+    skyRect
+  );
+
+
+  const particle = document.createElement("span");
+
+  particle.className = "co2-particle emission";
+
+  // Punto de partida: incendios.
+  particle.style.setProperty(
+    "--start-x",
+    `${firePoint.x - 5}px`
+  );
+
+  particle.style.setProperty(
+    "--start-y",
+    `${firePoint.y - 5}px`
+  );
+
+  // Punto de llegada: atmósfera.
+  particle.style.setProperty(
+    "--end-x",
+    `${atmospherePoint.x - 5}px`
+  );
+
+  particle.style.setProperty(
+    "--end-y",
+    `${atmospherePoint.y - 5}px`
+  );
+
+  // Sin retraso: salen continuamente.
+  particle.style.setProperty(
+    "--delay",
+    "0s"
+  );
+
+  co2ParticleLayer.appendChild(particle);
+
+  // Eliminar la pelotita cuando termina la animación.
+  particle.addEventListener(
+    "animationend",
+    () => {
+      particle.remove();
+    },
+    { once: true }
+  );
+
+}
 
 function createCO2Particles(
   element,
@@ -1336,20 +1721,16 @@ function createCO2Particles(
       skyRect
     );
 
-  const atmosphereRect =
-    atmosphere.getBoundingClientRect();
+  
+/* Centro de la atmósfera corregido
+   según el escalado del paisaje */
 
-  const atmospherePoint = {
-    x:
-      atmosphereRect.left -
-      skyRect.left +
-      atmosphereRect.width / 2,
+const atmospherePoint =
+  getElementCenter(
+    atmosphere,
+    skyRect
+  );
 
-    y:
-      atmosphereRect.top -
-      skyRect.top +
-      atmosphereRect.height / 2
-  };
 
 
   /*
@@ -1397,22 +1778,22 @@ function createCO2Particles(
 
       particle.style.setProperty(
         "--start-x",
-        `${startX - 3.5}px`
+        `${startX - 5}px`
       );
 
       particle.style.setProperty(
         "--start-y",
-        `${startY - 3.5}px`
+        `${startY - 5}px`
       );
 
       particle.style.setProperty(
         "--end-x",
-        `${endX - 3.5}px`
+        `${endX - 5}px`
       );
 
       particle.style.setProperty(
         "--end-y",
-        `${endY - 3.5}px`
+        `${endY - 5}px`
       );
 
       /*
@@ -1540,3 +1921,43 @@ document
    ========================================================= */
 
 updateSimulation();
+
+/* =====================================================
+   MODO DESAFÍOS
+   NUEVA FUNCIONALIDAD
+   ===================================================== */
+
+/* =====================================================
+   MODO DESAFÍOS
+   INGRESO DIRECTO A LA PÁGINA DE DESAFÍOS
+   ===================================================== */
+
+const challengesBtn = document.getElementById("challengesBtn");
+
+challengesBtn.addEventListener("click", () => {
+
+  window.location.href = "./desafios.html";
+
+});
+
+
+
+/* ==========================================
+   TRASLADAR INFORMACIÓN AL PANEL IZQUIERDO
+   ========================================== */
+
+const panelVariablesInfo =
+  document.querySelector(".control-panel");
+
+const panelInformacionInfo =
+  document.getElementById("infoPanel");
+
+if (panelVariablesInfo && panelInformacionInfo) {
+
+  // Mover el panel informativo dentro
+  // del panel izquierdo de variables.
+  panelVariablesInfo.appendChild(
+    panelInformacionInfo
+  );
+
+}

@@ -2,6 +2,8 @@
   box-sizing: border-box;
 }
 
+
+
 :root {
   --dark: #18324a;
   --card: rgba(255,255,255,.94);
@@ -10,9 +12,14 @@
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
-  background: #eaf3f8;
-  color: var(--dark);
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 button,
@@ -282,9 +289,19 @@ hr {
   text-align: center;
 }
 
+/* NOMBRES ARRIBA DE LAS IMÁGENES */
+.factory > span:last-child,
+.forest > span:last-child,
+.energy > span:last-child,
+.housing > span:last-child,
+.cattle > span:last-child {
+  top: auto;
+  bottom: calc(100% + var(--label-y, 0px));
+}
+
 /* POSICIÓN PERSONALIZADA DE LOS NOMBRES */
 
-.forest > span:last-child,
+
 .algae > span:last-child,
 .coral > span:last-child,
 .snails > span:last-child {
@@ -305,6 +322,7 @@ hr {
   color: #294656;
 }
 
+
 /* =========================================================
    ELEMENTOS TERRESTRES
    ========================================================= */
@@ -313,43 +331,43 @@ hr {
   left: 3%;
   top: 190px;
   filter: drop-shadow(0 7px 4px rgba(0,0,0,.18));
-  --label-x: -20px;
-  --label-y: -15px;
+  --label-x: -5px;
+  --label-y: -25px;
 }
 
 .forest {
   left: 20%;
   top: 240px;
-  --label-x: -10px;
-  --label-y: -10px;
+  --label-x: -5px;
+  --label-y: -5px;
 }
 
 .cattle {
   right: 8%;
   top: 280px;
-  --label-x: -10px;
+  --label-x: -5px;
   --label-y: 1px;
 }
 
 .housing {
   left: 69%;
   top: 255px;
-  --label-x: -10px;
+  --label-x: 5px;
   --label-y: 1px;
 }
 
 .energy {
   left: 50%;
   top: 240px;
-  --label-x: -10px;
-  --label-y: 25px;
+  --label-x: 10px;
+  --label-y: 10px;
 }
 
 .deforestation {
   left: 27%;
   top: 285px;
-  --label-x: -10px;
-  --label-y: 5px;
+  --label-x: 45px;
+  --label-y: -70px;
 }
 
 .cattle::after,
@@ -1080,7 +1098,7 @@ hr {
 }
 
 .dead-whale-sea {
-  left: 8%;
+  left: 13%;
   bottom: 48px;
   font-size: 38px;
 }
@@ -1631,4 +1649,554 @@ hr {
 .wetland .image-caption {
   position: relative;
   z-index: 2;
+}
+
+.topbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.challenges-btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 11px 18px;
+  background: #36a76b;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.challenges-btn:hover {
+  background: #238650;
+  transform: translateY(-2px);
+}
+
+
+/* ADAPTACIÓN A CELULARES */
+
+@media(max-width: 600px) {
+
+  .topbar-buttons {
+    gap: 6px;
+  }
+
+  .challenges-card {
+    padding: 22px 17px;
+  }
+
+  .challenges-card h1 {
+    font-size: 23px;
+  }
+
+  .rules-container {
+    padding: 15px;
+  }
+
+  .rule {
+    gap: 10px;
+  }
+
+}
+
+
+/* =========================================================
+   NUEVA MODIFICACIÓN:
+   AVISO DE RECUPERACIÓN BLOQUEADA POR CONTAMINACIÓN
+   ========================================================= */
+
+.recovery-warning {
+  display: none;
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 10px;
+
+  background: #fff0e8;
+  border: 1px solid #e6a17d;
+
+  color: #a13d20;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.recovery-warning.visible {
+  display: block;
+  animation: warningAppear .25s ease;
+}
+
+@keyframes warningAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* BOTONES DE LA BARRA SUPERIOR */
+
+.topbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-btn {
+  display: inline-block;
+  padding: 10px 18px;
+
+  background: #6dd5a7;
+  color: #173b59;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: 0.3s;
+   
+  border: 1px solid #6dd5a7;
+}
+
+.home-btn:hover {
+  background: #91e8bf;
+  transform: translateY(-2px);
+}
+
+
+/* ============================================
+   SIMULADOR - AJUSTE A PANTALLA
+   ============================================ */
+
+@media (min-width: 1200px) and (min-height: 650px) {
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Barra superior */
+
+  .topbar {
+    flex: 0 0 56px;
+    min-height: 56px;
+    padding: 7px 20px;
+    gap: 12px;
+  }
+
+  .topbar h1 {
+    font-size: 19px;
+  }
+
+  .topbar p {
+    font-size: 11px;
+  }
+
+  .topbar-buttons {
+    gap: 8px;
+  }
+
+  .topbar-buttons button,
+  .topbar-buttons a {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Distribución principal */
+
+  .app {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 9px 12px;
+
+    display: grid;
+    grid-template-columns:
+      minmax(370px, 34%)
+      minmax(0, 1fr);
+
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  /* Panel izquierdo */
+
+  .control-panel {
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    padding: 13px;
+    overflow: hidden;
+  }
+
+  .control-panel h2 {
+    font-size: 18px;
+    margin: 0 0 5px;
+  }
+
+  .control-panel .small {
+    font-size: 11px;
+    line-height: 1.3;
+    margin: 5px 0 11px;
+  }
+
+  /*
+    Convertimos el panel de controles
+    en una cuadrícula de dos columnas.
+  */
+
+  .control-panel {
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    grid-auto-rows: min-content;
+    align-content: start;
+    column-gap: 9px;
+    row-gap: 5px;
+  }
+
+  .control-panel > h2,
+  .control-panel > .small,
+  .control-panel > hr {
+    grid-column: 1 / -1;
+  }
+
+  .control-group {
+    min-width: 0;
+    margin: 0;
+    padding: 7px 9px;
+    border: 1px solid #dce7eb;
+    border-radius: 10px;
+  }
+
+  .control-group label {
+    font-size: 11px;
+    line-height: 1.2;
+    gap: 5px;
+    margin-bottom: 5px;
+    overflow-wrap: anywhere;
+  }
+
+  .control-group label span {
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+
+  .control-group input[type="range"] {
+    display: block;
+    width: 100%;
+    margin: 3px 0;
+  }
+
+  .control-panel hr {
+    margin: 2px 0;
+  }
+
+  .info-box,
+  .threshold-box {
+    min-width: 0;
+    margin: 0;
+    padding: 8px;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  /* Panel derecho */
+
+  .simulation {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Contenedor proporcional del paisaje */
+
+  .scene-viewport {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #82d7fa;
+  }
+
+  .scene-viewport > .sky {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 1000px !important;
+    height: 690px !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    transform-origin: top left;
+    transform: scale(var(--scene-scale, 1));
+  }
+
+  /* Métricas inferiores */
+
+  .dashboard {
+    flex: 0 0 auto;
+    display: grid;
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+
+    gap: 6px;
+    margin-top: 7px;
+  }
+
+  .dashboard .metric {
+    min-width: 0;
+    padding: 8px 5px;
+  }
+
+  .dashboard .metric span {
+    font-size: 10px;
+  }
+
+  .dashboard .metric strong {
+    font-size: 17px;
+    margin-top: 3px;
+  }
+
+  /* Estado del ecosistema */
+
+  .ecosystem-message {
+    flex: 0 0 auto;
+    margin-top: 7px;
+    padding: 7px 10px;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  /* Explicación del cálculo */
+
+  .explanation {
+    flex: 0 0 auto;
+    margin-top: 7px;
+    padding: 8px 11px;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .explanation span {
+    margin-top: 3px;
+  }
+
+  /* Información al seleccionar imágenes */
+
+  .info-panel.visible {
+    position: absolute;
+    z-index: 80;
+    top: 8px;
+    right: 8px;
+
+    width: min(350px, 90%);
+    max-height: calc(100% - 16px);
+
+    overflow-y: auto;
+    margin: 0;
+    padding: 15px;
+  }
+
+  .info-panel h2 {
+    font-size: 18px;
+  }
+
+  .info-panel p {
+    font-size: 12px;
+  }
+
+  .info-icon {
+    font-size: 30px;
+  }
+}
+
+/* ============================================
+   PANTALLAS PEQUEÑAS
+   ============================================ */
+
+@media (max-width: 1199px), (max-height: 649px) {
+
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .app {
+    height: auto;
+  }
+
+  .scene-viewport {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 14px;
+  }
+
+  .scene-viewport > .sky {
+    position: absolute;
+    width: 1000px;
+    height: 690px;
+    min-height: 0;
+    transform-origin: top left;
+    transform: scale(var(--scene-scale, 1));
+  }
+
+  .info-panel.visible {
+    position: relative;
+    width: auto;
+  }
+}
+
+
+
+/* ==========================================
+   PANEL INFORMATIVO SOBRE LAS VARIABLES
+   SIN TAPAR EL PAISAJE
+   ========================================== */
+
+/* El panel izquierdo será el contenedor
+   de la información emergente. */
+
+.control-panel {
+  position: relative;
+}
+
+/* Ventana informativa */
+
+.control-panel > .info-panel {
+  display: none;
+
+  position: absolute;
+  inset: 8px;
+
+  width: auto;
+  height: auto;
+  max-height: none;
+
+  margin: 0;
+  padding: 20px;
+
+  z-index: 100;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  background: #ffffff;
+  border: 1px solid #dce7eb;
+  border-radius: 14px;
+
+  box-shadow: 0 8px 25px rgba(0,0,0,.13);
+}
+
+/* Mostrar al seleccionar un elemento */
+
+.control-panel > .info-panel.visible {
+  display: block;
+}
+
+/* Botón cerrar */
+
+.control-panel .close-btn {
+  position: sticky;
+  top: 0;
+  float: right;
+
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: #edf4f6;
+  color: #173b59;
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* Título de la información */
+
+.control-panel .info-panel h2 {
+  font-size: 19px;
+  margin: 10px 0;
+}
+
+/* Descripción */
+
+.control-panel .info-panel p {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Estadísticas */
+
+.control-panel .info-stats {
+  display: grid;
+  gap: 8px;
+}
+
+.control-panel .info-stats div {
+  padding: 10px;
+  background: #eef5f8;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+
+/* ELIMINAR ESPACIO SUPERIOR DE LA PÁGINA */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body > .topbar {
+  margin-top: 0;
+}
+
+body > .app {
+  margin-top: 0;
+}
+
+/* Mantener separación interna del simulador */
+
+@media (min-width: 1200px) and (min-height: 650px) {
+  .app {
+    padding-top: 8px;
+  }
 }

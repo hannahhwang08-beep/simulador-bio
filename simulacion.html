@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <link rel="stylesheet" href="./CSS.styles/inicio.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador del Ciclo del Carbono</title>
+  <link rel="stylesheet" href="./CSS.styles/styles.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <div>
+    <h1>🌎 Ciclo del Carbono</h1>
+    <p>Simulador interactivo — Biología</p>
+  </div>
+
+  <div class="topbar-buttons">
+    <button id="challengesBtn" class="challenges-btn">
+      🎯 Iniciar desafíos
+    </button>
+     <a href="./index.html" class="home-btn">
+      Página principal
+    </a>
+    <button id="resetBtn" class="reset-btn">
+      Reiniciar
+    </button>
+  </div>
+</header>
+
+
+<main class="app">
+
+  <!-- =====================================================
+       PANEL DE VARIABLES
+       ===================================================== -->
+
+  <aside class="control-panel">
+
+    <h2>⚙️ Variables</h2>
+
+    <p class="small">
+      Modificá la cantidad de cada elemento para observar
+      cómo cambia el CO₂, la temperatura, el oxígeno y el océano.
+    </p>
+
+    <div class="control-group">
+      <label>
+        🏭 Fábricas
+        <span id="factoryCountValue">2</span>
+      </label>
+      <input id="factoryCount" type="range" min="0" max="20" value="2">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🚗 Autos
+        <span id="carCountValue">5</span>
+      </label>
+      <input id="carCount" type="range" min="0" max="50" value="5">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌳 Plantas / árboles
+        <span id="treeCountValue">10</span>
+      </label>
+      <input id="treeCount" type="range" min="0" max="100" value="10">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🏠 Viviendas (miles)
+        <span id="housingCountValue">1</span>
+      </label>
+      <input id="housingCount" type="range" min="0" max="20" value="1">
+    </div>
+
+    <div class="control-group">
+      <label>
+        ⚡ Energía fósil
+        <span id="energyCountValue">1</span>
+      </label>
+      <input id="energyCount" type="range" min="0" max="20" value="1">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌲 Deforestación
+        <span id="deforestationCountValue">0</span>
+      </label>
+      <input id="deforestationCount" type="range" min="0" max="20" value="0">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌾 Humedales
+        <span id="wetlandCountValue">1</span>
+      </label>
+      <input id="wetlandCount" type="range" min="0" max="20" value="1">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🐄 Ganado
+        <span id="cattleCountValue">5</span>
+      </label>
+      <input id="cattleCount" type="range" min="0" max="50" value="5">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌿 Algas
+        <span id="algaeCountValue">20</span>
+      </label>
+      <input id="algaeCount" type="range" min="0" max="100" value="20">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌿 Materia en descomposición en playa
+        <span id="whaleBeachCountValue">1</span>
+      </label>
+      <input id="whaleBeachCount" type="range" min="0" max="10" value="1">
+    </div>
+
+    <div class="control-group">
+      <label>
+        🌊 Materia en descomposición en mar
+        <span id="whaleSeaCountValue">1</span>
+      </label>
+      <input id="whaleSeaCount" type="range" min="0" max="10" value="1">
+    </div>
+
+    <hr>
+
+    <div class="info-box">
+      <strong>Importante</strong>
+      <p>
+        Los valores de CO₂ son unidades didácticas.
+        No representan ppm, toneladas ni cantidades reales.
+      </p>
+    </div>
+
+    <div class="threshold-box">
+      <strong>🌊 Umbral del océano</strong>
+      <p>
+        Cuando el CO₂ atmosférico supera 300 unidades,
+        una parte comienza a pasar al océano.
+      </p>
+    </div>
+
+  </aside>
+
+
+  <!-- =====================================================
+       SIMULACIÓN
+       ===================================================== -->
+
+  <section class="simulation">
+
+  <div class="scene-viewport">
+    <div class="sky">
+
+      <div class="cloud cloud1">☁️</div>
+      <div class="cloud cloud2">☁️</div>
+
+      <div class="atmosphere-label">
+        <span>☁️ ATMÓSFERA</span>
+        <strong id="atmosphereCO2">0</strong>
+        <small>unidades de CO₂</small>
+        <div id="co2Status" class="co2-status">
+          Nivel estable
+        </div>
+      </div>
+
+      <!-- MODIFICACIÓN:
+           Capa donde se crean los mini círculos de CO₂
+           cuando se hace click sobre un elemento. -->
+      <div id="co2ParticleLayer" class="co2-particle-layer" aria-hidden="true"></div>
+
+
+      <!-- FÁBRICA -->
+
+      <button class="scene-item factory" data-info="factory">
+        <img src="./Imagenes/Fabrica.png" width="150">
+        <span>Fábricas</span>
+      </button>
+
+
+      <!-- AUTOS -->
+
+      <div class="road">
+        <div class="road-line"></div>
+
+        <button class="scene-item car" data-info="car"><img src="./Imagenes/Auto1.png" width="95"></button>
+        <button class="scene-item car car2" data-info="car"><img src="./Imagenes/Auto2.png" width="95"></button>
+      </div>
+
+
+      <!-- BOSQUE -->
+
+      <button class="scene-item forest" data-info="tree">
+
+        <div class="trees">
+          <img src="./Imagenes/Bosque.png" width="140">
+        </div>
+        <span>Bosque</span>
+      </button>
+
+
+      <!-- VIVIENDAS -->
+
+      <button class="scene-item housing" data-info="housing">
+        <img src="./Imagenes/Vivienda.png" width="120">
+        <span>Viviendas</span>
+      </button>
+
+
+      <!-- ENERGÍA FÓSIL -->
+
+      <button class="scene-item energy" data-info="energy">
+
+        <span class="power-plant" aria-hidden="true">
+          <img src="./Imagenes/Energía.png" width="150">
+        </span>
+
+        <span>Energía fósil</span>
+
+      </button>
+
+
+      <!-- =====================================================
+           MODIFICACIÓN:
+           DEFORESTACIÓN
+           Los troncos aparecen solamente cuando hay
+           deforestación.
+           ===================================================== -->
+
+      <button
+        class="scene-item deforestation"
+        data-info="deforestation"
+      >
+
+        <span class="deforestation-logs" aria-hidden="true">
+          <img src="./Imagenes/Deforestacion.png" width="140">
+        </span>
+
+        <span>Deforestación</span>
+
+      </button>
+
+
+      <!-- INCENDIOS AUTOMÁTICOS -->
+      <!-- MODIFICACIÓN:-->
+
+      <button class="scene-item fire" data-info="fire">
+
+        <span class="fire-emoji" aria-hidden="true"><img src="./Imagenes/Incendios.png" width="120"></span>
+
+
+      </button>
+
+
+      <!-- GANADO -->
+
+      <button class="scene-item cattle" data-info="cattle">
+        <img src="./Imagenes/Ganado.png" width="65">
+        <span>Ganado</span>
+      </button>
+
+
+      <!-- FLUJOS DE CO₂ -->
+
+      <div class="co2-flow flow-factory emission"></div>
+      <div class="co2-flow flow-car emission"></div>
+      <div class="co2-flow flow-tree absorption"></div>
+      <div class="co2-flow flow-cattle emission"></div>
+
+
+      <!-- =====================================================
+           PLAYA
+           ===================================================== -->
+
+      <div class="beach">
+
+        <div class="sand"></div>
+
+
+        <!-- MATERIA EN DESCOMPOSICIÓN -->
+
+        <button
+          class="scene-item dead-whale-beach"
+          data-info="whaleBeach"
+        >
+          <span class="decomposition-whale"><img src="./Imagenes/Materia playa.png" width="100"></span>
+          <span>Materia en descomposición</span>
+        </button>
+
+
+        <div class="co2-flow flow-whale-beach emission"></div>
+
+
+        <!-- =================================================
+             MODIFICACIÓN:
+             HUMEDAL MÁS ARRIBA PARA NO TAPAR LOS CORALES
+             ================================================= -->
+
+        
+<!-- MODIFICACIÓN: imagen propia del humedal -->
+        <button
+          class="scene-item wetland"
+          id="wetlandImage"
+          data-info="wetland"
+          aria-label="Humedales y turberas"
+        >
+          <img
+            src="./Imagenes/Humedal.png"
+            alt="Humedal"
+            class="custom-landscape-image"
+          >
+          <span class="image-caption">Humedales / turberas</span>
+        </button>
+
+
+
+        <!-- =================================================
+             MODIFICACIÓN:
+             GLACIAR FUERA DEL OCÉANO
+             ================================================= -->
+
+        <!-- MODIFICACIÓN:
+             El glaciar ahora es clickeable como el resto de los elementos. -->
+        
+<!-- MODIFICACIÓN: imagen propia del glaciar -->
+        <button
+          class="scene-item polar-ice"
+          id="polarIce"
+          data-info="glacier"
+          aria-label="Glaciar"
+        >
+          <img
+            src="./Imagenes/Glaciar.png"
+            alt="Glaciar"
+            class="custom-landscape-image"
+          >
+          <span class="image-caption">Glaciar</span>
+        </button>
+
+
+
+        <!-- =================================================
+             OCÉANO
+             ================================================= -->
+
+        <div class="ocean">
+
+          <!-- MATERIA EN DESCOMPOSICIÓN -->
+
+          <button
+            class="scene-item dead-whale-sea"
+            data-info="whaleSea"
+          >
+            <span class="decomposition-whale"><img src="./Imagenes/Materia mar.png" width="100"></span>
+            <span>Materia en descomposición</span>
+          </button>
+
+
+          <!-- =================================================
+               MODIFICACIÓN:
+               VIDA MARINA AGRUPADA
+               ================================================= -->
+
+          <button class="scene-item algae" data-info="algae">
+
+            <img src="./Imagenes/Algas.png" width="60">
+
+            <span>Algas</span>
+
+          </button>
+
+
+          <button class="scene-item coral" data-info="coral">
+
+            <img src="./Imagenes/Corales.png" width="80">
+
+            <span>Corales</span>
+
+          </button>
+
+
+          <button class="scene-item snails" data-info="snail">
+
+            <img src="./Imagenes/Caracoles.png" width="80">
+
+            <span>Caracoles</span>
+
+          </button>
+
+          <div class="co2-flow flow-algae absorption"></div>
+          <div class="co2-flow flow-ocean absorption"></div>
+          <div class="co2-flow flow-whale-sea emission"></div>
+
+
+          <!-- =================================================
+               MODIFICACIÓN:
+               NIVEL DEL MAR ABAJO A LA IZQUIERDA
+               ================================================= -->
+
+          <div class="sea-level">
+
+            <span>🌊 Nivel del mar</span>
+
+            <strong id="seaLevel">
+              0,0 cm
+            </strong>
+
+            <small>
+              modelo didáctico
+            </small>
+
+          </div>
+
+
+          <!-- ESTADÍSTICAS DEL OCÉANO -->
+
+          <div class="ocean-stats">
+
+            <div>
+              <span>CO₂ disuelto</span>
+              <strong id="dissolvedCO2">0</strong>
+            </div>
+
+            <div id="oceanPHCard" class="clickable-stat">
+              <span>pH</span>
+              <strong id="oceanPH">8.2</strong>
+            </div>
+
+            <div>
+              <span>O₂</span>
+              <strong id="oceanOxygen">21%</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+        </div> <!-- Fin de sky -->
+  </div> <!-- Fin de scene-viewport -->
+
+  <!-- =====================================================
+       PANEL INFORMATIVO -->
+
+    <aside id="infoPanel" class="info-panel">
+
+      <button id="closeInfo" class="close-btn">×</button>
+
+      <div id="infoIcon" class="info-icon">🌎</div>
+
+      <h2 id="infoTitle">
+        Seleccioná un elemento
+      </h2>
+
+      <p id="infoDescription">
+        Hacé click sobre un elemento del paisaje
+        para conocer su función dentro del ciclo
+        del carbono.
+      </p>
+
+      <div id="infoStats" class="info-stats"></div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         DASHBOARD
+         ===================================================== -->
+
+    <section class="dashboard">
+
+      <div class="metric">
+        <span>CO₂ emitido</span>
+        <strong id="totalEmitted">0</strong>
+      </div>
+
+      <div class="metric absorption">
+        <span>CO₂ absorbido</span>
+        <strong id="totalAbsorbed">0</strong>
+      </div>
+
+      <div class="metric balance">
+        <span>CO₂ atmosférico</span>
+        <strong id="netBalance">0</strong>
+      </div>
+
+      <div class="metric temperature">
+        <span>🌡️ Aumento de temperatura</span>
+        <strong id="temperature">+0,00 °C</strong>
+      </div>
+
+      <!-- MODIFICACIÓN:
+           O₂ máximo = 21% -->
+
+      <div class="metric oxygen">
+        <span>🫧 Oxígeno</span>
+        <strong id="oxygen">21%</strong>
+      </div>
+
+    </section>
+
+
+    <div id="ecosystemMessage" class="ecosystem-message">
+      El ecosistema se encuentra en condiciones normales.
+    </div>
+
+
+    <div class="explanation">
+
+      <strong>¿Cómo se calcula?</strong>
+
+      <span>
+        Balance = CO₂ emitido − CO₂ absorbido.
+        En este modelo:
+        <b>1.000 CO₂ = 0 °C</b>,
+        <b>1.500 CO₂ = +0,25 °C</b>,
+        <b>2.000 CO₂ = +0,50 °C</b>.
+        Al superar 300 unidades,
+        parte del CO₂ pasa al océano.
+      </span>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script src="./java/script.js"></script>
+<script src="./java/ajustar-paisaje.js"></script>
+
+</body>
+</html>
